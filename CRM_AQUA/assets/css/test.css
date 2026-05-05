@@ -1,0 +1,37 @@
+/* Card style */
+.card { border-radius: 10px !important; }
+.card-header { border-bottom: 1px solid #f0f0f0 !important; color: #444; }
+
+/* Item sản phẩm trong giỏ */
+.cart-item {
+    padding: 12px 0;
+    border-bottom: 1px solid #f8f9fa;
+}
+
+.cart-item:last-child { border-bottom: none; }
+
+.btn-xs { padding: 0.1rem 0.4rem; font-size: 0.75rem; }
+
+/* Input số lượng */
+.qty-input {
+    width: 40px;
+    text-align: center;
+    border: none;
+    background: #f8f9fa;
+    font-weight: bold;
+}
+
+/* Border dashed cho khung khách hàng */
+.border-dashed { border-style: dashed !important; }
+
+/* Nút thanh toán */
+#payment-methods .btn {
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+#search-results {
+    position: absolute;
+    z-index: 1000;
+    width: calc(100% - 2rem);
+}

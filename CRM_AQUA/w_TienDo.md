@@ -2,6 +2,8 @@
 
 # Web Quản Lý Nhân Sự TS AQUA
 
+# Thực hiện: Lê Khánh Duy - DC24V7X603
+
 # ==================================
 
 # ---------------------------------------------
@@ -18,7 +20,7 @@
 
 # NOTE XOÁ KHI NỘP
 
-# 
+#
 
 # -----------------------------------------------
 
@@ -29,3 +31,5 @@
 # +++++++++++++++++++++++++++++++++++++++++++++++++++
 
 # Ngày 1: Giao diện, trang dashboard (XONG)
+
+# Ngày 2: Giao diện(Quản lý kho, Lịch sử kho), đang chuyển qua pos bán hàng hiện mới xử lý xong thêm sản phẩm, còn chức năng thông tin khách hàng, chỉnh sửa giá của 1 sản phẩm

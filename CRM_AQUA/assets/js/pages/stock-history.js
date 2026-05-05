@@ -155,7 +155,6 @@ window.viewDetail = function (ticketId) {
     })
     .join("");
 
-  // Đổ tiền Summary
   document.getElementById("sum-product-price").innerText =
     totalRaw.toLocaleString() + "đ";
   document.getElementById("sum-extra-fee").innerText =
