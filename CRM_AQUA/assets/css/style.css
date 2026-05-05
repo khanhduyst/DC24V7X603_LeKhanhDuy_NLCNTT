@@ -22,7 +22,7 @@ body {
   left: 0;
   background: white;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
-  z-index: 2000;
+  z-index: 1040;
   transition: var(--transition);
 }
 
@@ -113,7 +113,7 @@ body {
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 1500;
+  z-index: 1030;
   display: none;
 }
 
@@ -216,4 +216,225 @@ h6.fw-bold {
   h6 {
     font-size: 0.9rem !important;
   }
+}
+
+/* kho */
+
+.modal-content {
+  border-radius: 15px;
+}
+
+.modal-header .btn-close {
+  font-size: 0.8rem;
+}
+
+.form-label {
+  color: #636e72;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 96, 151, 0.02);
+}
+
+.nav-tabs .nav-link {
+  border: none;
+  color: #636e72;
+  border-bottom: 2px solid transparent;
+}
+
+.nav-tabs .nav-link.active {
+  background: none;
+  color: var(--primary-color) !important;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.border-dashed {
+  border-style: dashed !important;
+}
+.modal {
+  z-index: 1060 !important;
+}
+.modal-backdrop {
+  z-index: 1050 !important;
+}
+
+.modal-xl {
+  max-width: 1000px;
+}
+
+textarea.form-control:focus {
+  box-shadow: none;
+  border-color: #dee2e6;
+}
+
+.ck-editor__editable {
+  min-height: 250px;
+  border-radius: 0 0 8px 8px !important;
+}
+
+.ck.ck-editor__main > .ck-editor__editable:not(.ck-focused) {
+  border-color: #dee2e6;
+}
+
+.ck.ck-toolbar {
+  border-radius: 8px 8px 0 0 !important;
+  background-color: #f8f9fa !important;
+}
+
+.image-upload-main:hover,
+.image-upload-sub:hover {
+  border-color: var(--primary-color) !important;
+  background-color: rgba(0, 96, 151, 0.05) !important;
+}
+
+.image-upload-main i,
+.image-upload-sub i {
+  transition: var(--transition);
+}
+
+.image-upload-main:hover i,
+.image-upload-sub:hover i {
+  color: var(--primary-color) !important;
+}
+
+/* Màu chữ và viền xanh AQUA của web */
+.text-aqua {
+  color: #006097 !important;
+}
+
+.border-aqua {
+  border-color: #006097 !important;
+}
+
+.btn-outline-aqua {
+  border-color: #006097;
+  color: #006097;
+}
+
+.btn-outline-aqua:hover {
+  background-color: #006097;
+  color: white;
+}
+
+/* Nút Lưu màu xanh Web */
+.btn-success,
+.btn-primary {
+  background-color: #006097 !important;
+  border-color: #006097 !important;
+}
+
+.btn-success:hover,
+.btn-primary:hover {
+  background-color: #004d7a !important;
+  border-color: #004d7a !important;
+}
+
+/* Tinh chỉnh Input cho đẹp hơn */
+.form-control,
+.form-select {
+  padding: 0.5rem 0.75rem; /* Làm input bự hơn */
+  border-radius: 8px;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #006097;
+  box-shadow: 0 0 0 0.25rem rgba(0, 96, 151, 0.1);
+}
+
+/* Chỉnh bo góc và màu viền cho Quill */
+.ql-toolbar.ql-snow {
+  border-radius: 8px 8px 0 0 !important;
+  border-color: #dee2e6 !important;
+  background-color: #f8f9fa;
+}
+
+.ql-container.ql-snow {
+  border-radius: 0 0 8px 8px !important;
+  border-color: #dee2e6 !important;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+/* Đổi màu icon khi hover thành màu xanh web */
+.ql-snow.ql-toolbar button:hover .ql-stroke,
+.ql-snow.ql-toolbar button.ql-active .ql-stroke {
+  stroke: #006097 !important;
+}
+
+.ql-snow.ql-toolbar button:hover .ql-fill,
+.ql-snow.ql-toolbar button.ql-active .ql-fill {
+  fill: #006097 !important;
+}
+
+:root {
+  --aqua-color: #006097;
+}
+
+.text-aqua {
+  color: var(--aqua-color) !important;
+}
+.btn-aqua {
+  background-color: var(--aqua-color);
+  color: white;
+  border: none;
+}
+.btn-aqua:hover {
+  background-color: #004d7a;
+  color: white;
+}
+.border-aqua {
+  border-color: var(--aqua-color) !important;
+}
+/* Nút hành động trong bảng */
+.btn-outline-aqua {
+  border-color: #006097;
+  color: #006097;
+  background: transparent;
+  transition: all 0.2s;
+}
+
+.btn-outline-aqua:hover {
+  background-color: #006097;
+  color: white;
+}
+
+.table th {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #666;
+}
+
+.nav-tabs .nav-link {
+  border: none;
+  color: #666;
+  margin-right: 20px;
+  padding-left: 0;
+  padding-right: 0;
+}
+.nav-tabs .nav-link.active {
+  background: none;
+  color: var(--aqua-color);
+  border-bottom: 2px solid var(--aqua-color);
+}
+
+.form-control,
+.form-select {
+  border-radius: 8px;
+  padding: 10px 15px;
+}
+.form-control:focus {
+  border-color: var(--aqua-color);
+  box-shadow: 0 0 0 0.2rem rgba(0, 96, 151, 0.1);
+}
+
+/* Quill Style */
+.ql-toolbar.ql-snow {
+  border-radius: 8px 8px 0 0 !important;
+  border-color: #eee !important;
+}
+.ql-container.ql-snow {
+  border-radius: 0 0 8px 8px !important;
+  border-color: #eee !important;
 }

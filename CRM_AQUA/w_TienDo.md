@@ -28,4 +28,4 @@
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++
 
-# Ngày 1: Giao diện, trang dashboard
+# Ngày 1: Giao diện, trang dashboard (XONG)
