@@ -6,29 +6,50 @@
 
     <ul class="nav-list">
         <li class="nav-item">
-            <a href="index.html" class="nav-link active">
+            <a href="index.html" class="nav-link"> 
                 <i class="bi bi-speedometer2"></i> Dashboard
             </a>
         </li>
-        <!-- Quản lý Kho -->
+
         <li class="nav-item">
-            <a href="inventory.html" class="nav-link">
-                <i class="bi bi-box-seam"></i> Quản Lý Kho
+            <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
+                href="#inventoryMenu" role="button" aria-expanded="false">
+                <span>
+                    <i class="bi bi-box me-2"></i> Quản Lý Kho
+                </span>
+                <i class="bi bi-chevron-down small toggle-icon"></i>
             </a>
+
+            <div class="collapse" id="inventoryMenu">
+                <ul class="nav flex-column ms-3">
+                    <li class="nav-item">
+                        <a class="nav-link py-2 d-flex align-items-center text-nowrap" href="inventory.html">
+                            <i class="bi bi-list-ul me-2"></i>
+                            <span>Danh mục thuốc</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link py-2 d-flex align-items-center text-nowrap" href="stock-history.html">
+                            <i class="bi bi-clock-history me-2"></i>
+                            <span>Lịch sử biến động</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </li>
-        <!-- Quản lý Nhân sự -->
+
         <li class="nav-item">
             <a href="employees.html" class="nav-link">
                 <i class="bi bi-people"></i> Quản Lý Nhân Viên
             </a>
         </li>
-        <!-- Quản lý Khách hàng -->
+
         <li class="nav-item">
             <a href="customers.html" class="nav-link">
                 <i class="bi bi-person-badge"></i> Quản Lý Khách Hàng
             </a>
         </li>
-        <!-- Bán hàng & KPI -->
+
         <li class="nav-item">
             <a href="sales.html" class="nav-link">
                 <i class="bi bi-cart-check"></i> Thao Tác Bán Hàng
@@ -40,7 +61,6 @@
             </a>
         </li>
         <hr>
-        <!-- Cài đặt -->
         <li class="nav-item">
             <a href="settings.html" class="nav-link">
                 <i class="bi bi-gear"></i> Cấu Hình Hệ Thống
