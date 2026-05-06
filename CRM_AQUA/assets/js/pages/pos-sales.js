@@ -6,6 +6,7 @@ const products = [
 
 let cart = [];
 let currentCustomer = null;
+let selectedPaymentMethod = "cash";
 
 document.addEventListener("DOMContentLoaded", () => {
   initSearchProduct();
@@ -17,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .getElementById("order-discount")
     .addEventListener("input", calculateTotal);
+  initPaymentMethodSelection();
 });
 
 function initSearchProduct() {
@@ -239,34 +241,63 @@ window.saveNewCustomer = function () {
   let hasError = false;
   const name = document.getElementById("new-cust-name");
   const phone = document.getElementById("new-cust-phone");
-  const province = document.getElementById("new-cust-province");
 
+  // Lấy các element select địa chỉ
+  const provinceEl = document.getElementById("new-cust-province");
+  const districtEl = document.getElementById("new-cust-district");
+  const wardEl = document.getElementById("new-cust-ward");
+  const addressDetail = document.getElementById("new-cust-address");
+  const staff = document.getElementById("new-cust-staff");
+
+  // Kiểm tra nhanh các trường bắt buộc
   if (name.value.trim() === "") {
     name.classList.add("is-invalid", "shake-error");
     hasError = true;
   }
-
-  const vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
-  if (!vnf_regex.test(phone.value.trim())) {
-    phone.classList.add("is-invalid", "shake-error");
-    hasError = true;
-  }
-
-  if (province.value === "") {
-    province.classList.add("is-invalid", "shake-error");
+  if (provinceEl.value === "") {
+    provinceEl.classList.add("is-invalid", "shake-error");
     hasError = true;
   }
 
   if (hasError) return;
 
+  // --- PHẦN QUAN TRỌNG: GỘP ĐỊA CHỈ ---
+  // Lấy text hiển thị của option được chọn thay vì lấy ID/Code
+  const provinceText = provinceEl.options[provinceEl.selectedIndex].text;
+  const districtText =
+    districtEl.value !== ""
+      ? districtEl.options[districtEl.selectedIndex].text
+      : "";
+  const wardText =
+    wardEl.value !== "" ? wardEl.options[wardEl.selectedIndex].text : "";
+
+  // Tạo chuỗi địa chỉ đầy đủ
+  let fullAddress = addressDetail.value.trim();
+  if (wardText) fullAddress += (fullAddress ? ", " : "") + wardText;
+  if (districtText) fullAddress += (fullAddress ? ", " : "") + districtText;
+  if (provinceText) fullAddress += (fullAddress ? ", " : "") + provinceText;
+
+  const newCustomer = {
+    id: Date.now(),
+    name: name.value.trim(),
+    phone: phone.value.trim(),
+    address: fullAddress, // Lưu địa chỉ đã gộp vào đây
+    staff: staff.value.trim() || "Chưa phân công",
+  };
+
+  mockCustomers.push(newCustomer);
+  currentCustomer = newCustomer;
+  renderCustomerCard(newCustomer);
+
   Swal.fire({
     icon: "success",
     title: "Thành công!",
-    text: "Đã thêm khách hàng mới vào hệ thống.",
+    text: "Đã thêm khách hàng với địa chỉ đầy đủ",
     showConfirmButton: false,
     timer: 1500,
   });
 
+  document.getElementById("formAddCustomer").reset();
   bootstrap.Modal.getInstance(
     document.getElementById("addCustomerModal"),
   ).hide();
@@ -397,4 +428,124 @@ window.removeCustomer = function () {
         <i class="bi bi-person-plus fs-2 text-muted"></i>
         <p class="small text-muted mb-0 mt-2">Chưa có thông tin khách hàng</p>
     `;
+};
+
+// Hàm xử lý việc chọn nút thanh toán
+function initPaymentMethodSelection() {
+  const paymentButtons = document.querySelectorAll("#payment-methods button");
+
+  paymentButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      // Xóa class active (btn-primary) và trả về btn-outline-primary cho tất cả
+      paymentButtons.forEach((b) => {
+        b.classList.remove("btn-primary");
+        b.classList.add("btn-outline-primary");
+      });
+
+      // Kích hoạt nút được chọn
+      btn.classList.remove("btn-outline-primary");
+      btn.classList.add("btn-primary");
+
+      // Lưu giá trị phương thức thanh toán
+      selectedPaymentMethod = btn.getAttribute("data-method");
+    });
+  });
+}
+
+// Cập nhật lại hàm tạo đơn hàng của Duy
+window.createOrder = function () {
+  if (cart.length === 0) {
+    Swal.fire("Lỗi!", "Vui lòng chọn sản phẩm trước khi thanh toán.", "error");
+    return;
+  }
+
+  if (!currentCustomer) {
+    Swal.fire("Thông báo", "Vui lòng chọn hoặc thêm khách hàng.", "warning");
+    return;
+  }
+
+  const totalMoney = document.getElementById("total-final").innerText;
+  const amount = totalMoney.replace(/\D/g, "");
+
+  if (selectedPaymentMethod === "cash") {
+    // Trường hợp tiền mặt: Thông báo thành công luôn
+    Swal.fire({
+      icon: "success",
+      title: "Tạo đơn thành công!",
+      text: `Đơn hàng của ${currentCustomer.name} đã được ghi nhận bằng tiền mặt.`,
+      confirmButtonColor: "#0d6efd",
+    }).then(() => {
+      location.reload(); // Reset lại trang sau khi xong
+    });
+  } else if (selectedPaymentMethod === "momo") {
+    // XỬ LÝ MOMO SANDBOX
+    // Link QR MoMo Test (Đây là link mẫu để quét ra thông tin thanh toán test)
+    const momoTestQR = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=2|99|0901234567|MoMo_Sandbox|${amount}|0|0|CRM_AQUA_PAYMENT`;
+
+    Swal.fire({
+      title:
+        '<img src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png" width="40"> Thanh toán MoMo',
+      html: `
+                <div class="text-center">
+                    <p class="mb-2">Số tiền test: <b class="text-danger fs-4">${totalMoney}</b></p>
+                    <div class="bg-light p-3 rounded mb-3">
+                        <img src="${momoTestQR}" class="img-fluid" style="max-width: 200px;">
+                    </div>
+                    <div class="alert alert-warning py-2 x-small">
+                        <i class="bi bi-info-circle me-1"></i> Duy hãy dùng App MoMo quét mã này để test luồng nhé!
+                    </div>
+                </div>
+            `,
+      showCancelButton: true,
+      confirmButtonText: "Đã hoàn tất thanh toán",
+      confirmButtonColor: "#af2070", // Màu tím MoMo
+      cancelButtonText: "Hủy",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          "Thành công",
+          "Đơn hàng đã được thanh toán qua MoMo Sandbox",
+          "success",
+        ).then(() => location.reload());
+      }
+    });
+  } else {
+    // Trường hợp VietQR hoặc VNPay: Hiện mã QR để quét
+    let qrUrl = "";
+    if (selectedPaymentMethod === "vietqr") {
+      // Demo link VietQR (Duy có thể thay bằng API ngân hàng thật sau này)
+      qrUrl =
+        "https://img.vietqr.io/image/970423-123456789-compact.jpg?amount=" +
+        totalMoney.replace(/\D/g, "");
+    } else {
+      // Demo VNPay
+      qrUrl =
+        "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=VNPAY_PAYMENT";
+    }
+
+    Swal.fire({
+      title: "Quét mã thanh toán",
+      html: `
+                <div class="text-center">
+                    <p class="mb-2">Tổng tiền: <b class="text-danger fs-4">${totalMoney}</b></p>
+                    <img src="${qrUrl}" class="img-fluid rounded mb-3" style="max-width: 250px;" alt="QR Code">
+                    <p class="small text-muted">Vui lòng quét mã qua ứng dụng ngân hàng của bạn</p>
+                </div>
+            `,
+      showCancelButton: true,
+      confirmButtonText: "Xác nhận đã chuyển khoản",
+      cancelButtonText: "Hủy bỏ",
+      confirmButtonColor: "#0d6efd",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          "Thành công!",
+          "Hệ thống đang kiểm tra giao dịch.",
+          "success",
+        ).then(() => {
+          location.reload();
+        });
+      }
+    });
+  }
 };
