@@ -1,4 +1,3 @@
-// 1. DỮ LIỆU TEST
 const products = [
   { id: 1, name: "Men vi sinh Eco-Pro", code: "MEN02", price: 350000 },
   { id: 2, name: "AquaClean Pro - Xử lý đáy", code: "AQ001", price: 150000 },
@@ -6,9 +5,12 @@ const products = [
 ];
 
 let cart = [];
+let currentCustomer = null;
 
 document.addEventListener("DOMContentLoaded", () => {
   initSearchProduct();
+  initSearchCustomer();
+  loadProvinces();
   document
     .getElementById("extra-fee")
     .addEventListener("input", calculateTotal);
@@ -16,8 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("order-discount")
     .addEventListener("input", calculateTotal);
 });
-
-// --- BOX TRÁI: TÌM KIẾM ---
 
 function initSearchProduct() {
   const searchInput = document.getElementById("search-product");
@@ -37,9 +37,8 @@ function initSearchProduct() {
     );
 
     if (filtered.length > 0) {
-      resultsBox.innerHTML = ""; // Xóa trắng kết quả cũ
+      resultsBox.innerHTML = "";
       filtered.forEach((p) => {
-        // TẠO ELEMENT THỦ CÔNG ĐỂ KHÔNG BỊ LỖI CLICK
         const item = document.createElement("div");
         item.className =
           "list-group-item list-group-item-action d-flex justify-content-between align-items-center cursor-pointer py-2";
@@ -50,7 +49,6 @@ function initSearchProduct() {
                     </div>
                     <div class="text-primary fw-bold small">${p.price.toLocaleString()}đ</div>
                 `;
-        // BẮT SỰ KIỆN CLICK TRỰC TIẾP VÀO ĐÂY
         item.addEventListener("click", () => {
           handleSelectProduct(p);
         });
@@ -66,14 +64,11 @@ function initSearchProduct() {
 }
 
 function handleSelectProduct(product) {
-  console.log("Đã chọn sản phẩm:", product.name); // Để Duy kiểm tra trong Console (F12)
-
   const existingIndex = cart.findIndex((item) => item.id === product.id);
 
   if (existingIndex !== -1) {
     cart[existingIndex].qty += 1;
   } else {
-    // Thêm món mới vào mảng
     cart.push({
       id: product.id,
       name: product.name,
@@ -83,11 +78,8 @@ function handleSelectProduct(product) {
     });
   }
 
-  // Ẩn tìm kiếm
   document.getElementById("search-results").classList.add("d-none");
   document.getElementById("search-product").value = "";
-
-  // Vẽ lại giỏ hàng
   renderCart();
 }
 
@@ -95,9 +87,8 @@ function renderCart() {
   const cartList = document.getElementById("cart-list");
   const emptyMsg = document.getElementById("cart-empty");
 
-  // Nếu giỏ hàng trống
   if (cart.length === 0) {
-    if (emptyMsg) emptyMsg.classList.remove("d-none"); // Kiểm tra có emptyMsg mới chạy
+    if (emptyMsg) emptyMsg.classList.remove("d-none");
     cartList.innerHTML = "";
     if (emptyMsg) cartList.appendChild(emptyMsg);
     document.getElementById("subtotal").innerText = "0đ";
@@ -105,8 +96,7 @@ function renderCart() {
     return;
   }
 
-  // Nếu có hàng: Ẩn thông báo "Chưa có thông tin"
-  if (emptyMsg) emptyMsg.classList.add("d-none"); // Thêm dấu if này để né lỗi 'classList' của null
+  if (emptyMsg) emptyMsg.classList.add("d-none");
 
   let subtotal = 0;
   cartList.innerHTML = "";
@@ -142,8 +132,6 @@ function renderCart() {
     row.querySelector(".btn-minus").onclick = () => updateQty(index, -1);
     row.querySelector(".btn-plus").onclick = () => updateQty(index, 1);
     row.querySelector(".btn-remove").onclick = () => removeItem(index);
-    // Nếu Duy có modal sửa giá thì mở dòng dưới
-    // row.querySelector('.btn-edit-price').onclick = () => openPriceModal(index);
 
     cartList.appendChild(row);
   });
@@ -152,8 +140,6 @@ function renderCart() {
     subtotal.toLocaleString() + "đ";
   calculateTotal();
 }
-
-// --- CÁC HÀM CẬP NHẬT ---
 
 window.updateQty = (idx, delta) => {
   cart[idx].qty = Math.max(1, cart[idx].qty + delta);
@@ -174,3 +160,241 @@ function calculateTotal() {
   document.getElementById("total-final").innerText =
     final.toLocaleString() + "đ";
 }
+
+const mockCustomers = [
+  { id: 101, name: "Chú Tám (Sóc Trăng)", phone: "0901234567" },
+  { id: 102, name: "Anh Bảy (Trần Đề)", phone: "0988777666" },
+  { id: 103, name: "Chị Năm (Vĩnh Châu)", phone: "0911222333" },
+];
+
+function initSearchCustomer() {
+  const custInput = document.getElementById("search-customer");
+  let resultsContainer = document.getElementById("customer-results-container");
+
+  if (!resultsContainer) {
+    resultsContainer = document.createElement("div");
+    resultsContainer.id = "customer-results-container";
+    resultsContainer.className = "d-none";
+    custInput.closest(".input-group").style.position = "relative";
+    custInput.closest(".input-group").appendChild(resultsContainer);
+  }
+
+  custInput.addEventListener("input", (e) => {
+    const key = e.target.value.trim().toLowerCase();
+
+    if (key === "") {
+      resultsContainer.classList.add("d-none");
+      return;
+    }
+
+    const filtered = mockCustomers.filter(
+      (c) => c.name.toLowerCase().includes(key) || c.phone.includes(key),
+    );
+
+    resultsContainer.classList.remove("d-none");
+
+    let html = filtered
+      .map(
+        (c) => `
+            <div class="customer-item" onclick='selectCustomer(${JSON.stringify(c)})'>
+                <div class="fw-bold small text-dark">${c.name}</div>
+                <div class="x-small text-muted">${c.phone}</div>
+            </div>
+        `,
+      )
+      .join("");
+
+    html += `
+            <div class="customer-item add-new-cust-item text-center py-2" onclick="openAddCustomerModal()">
+                <i class="bi bi-plus-lg me-1"></i> Thêm khách hàng mới
+            </div>
+        `;
+
+    resultsContainer.innerHTML = html;
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!custInput.contains(e.target) && !resultsContainer.contains(e.target)) {
+      resultsContainer.classList.add("d-none");
+    }
+  });
+}
+
+window.openAddCustomerModal = function () {
+  const modalEl = document.getElementById("addCustomerModal");
+  if (modalEl) {
+    const modal = new bootstrap.Modal(modalEl);
+    modal.show();
+  } else {
+    alert("Chưa có Modal Thêm khách hàng trong HTML!");
+  }
+};
+
+window.saveNewCustomer = function () {
+  const inputs = document.querySelectorAll(
+    "#formAddCustomer .form-control, #formAddCustomer .form-select",
+  );
+  inputs.forEach((el) => el.classList.remove("is-invalid", "shake-error"));
+
+  let hasError = false;
+  const name = document.getElementById("new-cust-name");
+  const phone = document.getElementById("new-cust-phone");
+  const province = document.getElementById("new-cust-province");
+
+  if (name.value.trim() === "") {
+    name.classList.add("is-invalid", "shake-error");
+    hasError = true;
+  }
+
+  const vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+  if (!vnf_regex.test(phone.value.trim())) {
+    phone.classList.add("is-invalid", "shake-error");
+    hasError = true;
+  }
+
+  if (province.value === "") {
+    province.classList.add("is-invalid", "shake-error");
+    hasError = true;
+  }
+
+  if (hasError) return;
+
+  Swal.fire({
+    icon: "success",
+    title: "Thành công!",
+    text: "Đã thêm khách hàng mới vào hệ thống.",
+    showConfirmButton: false,
+    timer: 1500,
+  });
+
+  bootstrap.Modal.getInstance(
+    document.getElementById("addCustomerModal"),
+  ).hide();
+};
+
+const provinceSelect = document.getElementById("new-cust-province");
+const districtSelect = document.getElementById("new-cust-district");
+const wardSelect = document.getElementById("new-cust-ward");
+
+async function loadProvinces() {
+  try {
+    const response = await fetch("https://provinces.open-api.vn/api/p/");
+    const data = await response.json();
+    data.forEach((p) => {
+      let opt = document.createElement("option");
+      opt.value = p.code;
+      opt.text = p.name;
+      provinceSelect.add(opt);
+    });
+  } catch (error) {
+    console.error("Lỗi lấy tỉnh thành:", error);
+  }
+}
+
+provinceSelect.addEventListener("change", async function () {
+  districtSelect.innerHTML = '<option value="">-- Chọn Huyện --</option>';
+  wardSelect.innerHTML = '<option value="">-- Chọn Xã --</option>';
+  wardSelect.disabled = true;
+
+  if (!this.value) {
+    districtSelect.disabled = true;
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `https://provinces.open-api.vn/api/p/${this.value}?depth=2`,
+    );
+    const data = await response.json();
+    data.districts.forEach((d) => {
+      let opt = document.createElement("option");
+      opt.value = d.code;
+      opt.text = d.name;
+      districtSelect.add(opt);
+    });
+    districtSelect.disabled = false;
+  } catch (error) {
+    console.error("Lỗi lấy huyện:", error);
+  }
+});
+
+districtSelect.addEventListener("change", async function () {
+  wardSelect.innerHTML = '<option value="">-- Chọn Xã --</option>';
+
+  if (!this.value) {
+    wardSelect.disabled = true;
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `https://provinces.open-api.vn/api/d/${this.value}?depth=2`,
+    );
+    const data = await response.json();
+    data.wards.forEach((w) => {
+      let opt = document.createElement("option");
+      opt.value = w.code;
+      opt.text = w.name;
+      wardSelect.add(opt);
+    });
+    wardSelect.disabled = false;
+  } catch (error) {
+    console.error("Lỗi lấy xã:", error);
+  }
+});
+
+window.selectCustomer = function (customer) {
+  if (currentCustomer) {
+    Swal.fire({
+      title: "Thông báo!",
+      text: "Mỗi hóa đơn chỉ xuất được cho 1 khách hàng. Duy vui lòng xóa khách cũ trước khi chọn khách mới nhé!",
+      icon: "warning",
+      confirmButtonText: "Đã hiểu",
+      confirmButtonColor: "#0d6efd",
+      timer: 4000,
+    });
+    return;
+  }
+
+  const resultsContainer = document.getElementById(
+    "customer-results-container",
+  );
+  const custInput = document.getElementById("search-customer");
+
+  currentCustomer = customer;
+  renderCustomerCard(customer);
+
+  resultsContainer.classList.add("d-none");
+  custInput.value = "";
+};
+
+function renderCustomerCard(customer) {
+  const infoBox = document.getElementById("customer-info");
+  infoBox.innerHTML = `
+        <div class="text-start p-3 bg-white rounded border border-primary position-relative shadow-sm w-100 animate__animated animate__fadeIn">
+            <button type="button" class="btn-close position-absolute" 
+                    style="top: 10px; right: 10px; z-index: 10;" 
+                    onclick="removeCustomer()"></button>
+            <div class="fw-bold text-primary mb-1">
+                <i class="bi bi-person-badge-fill me-2"></i>${customer.name}
+            </div>
+            <div class="small text-muted mb-1">
+                <i class="bi bi-telephone-fill me-2"></i>${customer.phone}
+            </div>
+            <div class="x-small text-muted border-top pt-2 mt-2">
+                <i class="bi bi-geo-alt-fill me-1"></i>${customer.address || "Chưa có địa chỉ"}
+            </div>
+            <div class="badge bg-light text-primary border mt-2 fw-normal" style="font-size: 10px;">
+                NV: ${customer.staff || "Chưa phân công"}
+            </div>
+        </div>
+    `;
+}
+
+window.removeCustomer = function () {
+  currentCustomer = null;
+  document.getElementById("customer-info").innerHTML = `
+        <i class="bi bi-person-plus fs-2 text-muted"></i>
+        <p class="small text-muted mb-0 mt-2">Chưa có thông tin khách hàng</p>
+    `;
+};
