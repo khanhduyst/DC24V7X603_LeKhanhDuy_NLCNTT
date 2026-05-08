@@ -759,3 +759,105 @@ input[type="date"] {
   box-shadow: 0 4px 10px rgba(13, 110, 253, 0.4);
   transform: translateY(-1px);
 }
+
+.table-responsive {
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.table-responsive::-webkit-scrollbar {
+    height: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #dee2e6;
+    border-radius: 10px;
+}
+
+#employee-card-list .card:active {
+    transform: scale(0.98);
+}
+
+#empTab {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    width: 100%;
+    border-bottom: 1px solid #eee;
+    padding: 0;
+    margin: 0;
+}
+
+#empTab .nav-item {
+    flex: 1 1 33.33%;
+    max-width: 33.33%;
+}
+
+#empTab .nav-link {
+    width: 100%;
+    border: none !important;
+    color: #6c757d;
+    font-size: 11px;
+    padding: 10px 2px;
+    background: none;
+    position: relative;
+    white-space: nowrap;
+    text-align: center;
+}
+
+#empTab .nav-link i {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+
+#empTab .nav-link.active {
+    color: #0d6efd !important;
+    font-weight: bold;
+}
+
+#empTab .nav-link.active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #0d6efd;
+}
+
+#modalDetail .modal-header {
+    padding: 15px 20px;
+}
+
+.x-small {
+    font-size: 10px;
+    letter-spacing: 0.5px;
+}
+
+#tab-info-content .form-control:focus,
+#tab-info-content .form-select:focus {
+    background-color: #fff !important;
+    border: 1px solid #0d6efd !important;
+    box-shadow: none !important;
+}
+
+#tab-info-content label {
+    margin-bottom: 2px;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .table tbody tr {
+        cursor: pointer;
+    }
+    .table tbody tr:active {
+        background-color: #f8f9fa;
+    }
+}
+
+@media (min-width: 768px) {
+    .border-md-end {
+        border-right: 1px solid #eee !important;
+    }
+}

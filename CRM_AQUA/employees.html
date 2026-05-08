@@ -25,9 +25,9 @@
         <div class="container-fluid py-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h4 class="fw-bold text-primary mb-0">QUẢN LÝ NHÂN VIÊN</h4>
-                <button class="btn btn-primary shadow-sm" onclick="openAddEmployeeModal()">
+                <a href="./add-employee.html" class="btn btn-primary shadow-sm">
                     <i class="bi bi-person-plus-fill me-2"></i>Thêm mới
-                </button>
+                </a>
             </div>
 
             <div class="card border-0 shadow-sm mb-4">
@@ -136,6 +136,44 @@
                     <button type="button" class="btn btn-primary" onclick="editEmployee()">
                         <i class="bi bi-pencil-square me-2"></i>Chỉnh sửa
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade shadow" id="modalReportDetail" tabindex="-1" aria-hidden="true" style="z-index: 1060;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0">
+                <div class="modal-header bg-light">
+                    <h6 class="modal-title fw-bold" id="report-title">Báo cáo thị trường</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-2 mb-3">
+                        <div class="col-7">
+                            <img id="report-img"
+                                src="https://hashtagcamtay.com/wp-content/uploads/2023/07/khung-check-in-su-kien-4.jpg"
+                                class="img-fluid rounded border w-100" style="height: 150px; object-fit: cover;">
+                            <div class="x-small text-muted mt-1 text-center">Ảnh check-in</div>
+                        </div>
+                        <div class="col-5">
+                            <div class="position-relative border rounded overflow-hidden" style="height: 150px;">
+                                <img src="https://www.google.com/maps/vt/pb=!1m4!1m3!1i13!2i6330!3i3725!2m3!1e0!2sm!3i606233261!3m8!2svi!3sUS!5e1105!12m4!1e68!2m2!1sset!2sRoadmap!4e0!5m1!1e0!23i1338780!23i1339140"
+                                    class="w-100 h-100" style="object-fit: cover; filter: grayscale(0.5);">
+                                <i
+                                    class="bi bi-geo-alt-fill text-danger position-absolute top-50 start-50 translate-middle fs-4"></i>
+                            </div>
+                            <div class="x-small text-muted mt-1 text-center">Vị trí GPS</div>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-light rounded shadow-sm">
+                        <label class="x-small fw-bold text-muted">NỘI DUNG TƯ VẤN</label>
+                        <p class="small mb-0 mt-1" id="report-note">Đang tải nội dung...</p>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pb-4">
+                    <button type="button" class="btn btn-primary w-100 py-2 fw-bold" data-bs-dismiss="modal">ĐÃ XÁC
+                        MINH</button>
                 </div>
             </div>
         </div>

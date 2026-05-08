@@ -1,102 +1,125 @@
-/* Làm cho bảng kéo ngang mượt trên điện thoại */
-.table-responsive {
+.custom-card {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.main-content {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.form-control, .form-select, .input-group-text {
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    background-color: #fff !important;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
+}
+
+.btn-primary {
     border-radius: 8px;
-    border: 1px solid #eee;
+    font-weight: 500;
 }
 
-/* Tùy chỉnh thanh cuộn cho đẹp, không bị thô */
-.table-responsive::-webkit-scrollbar {
-    height: 4px;
-}
-.table-responsive::-webkit-scrollbar-thumb {
-    background: #dee2e6;
-    border-radius: 10px;
-}
-
-/* Hiệu ứng khi nhấn vào hàng trên Mobile */
-@media (max-width: 768px) {
-    .table tbody tr {
-        cursor: pointer;
-    }
-    .table tbody tr:active {
-        background-color: #f8f9fa;
-    }
+/* Thiết lập khung cho tất cả input và select trong form */
+.custom-field .form-control, 
+.custom-field .form-select {
+    border: 1px solid #dee2e6 !important; /* Tạo khung 4 cạnh */
+    border-radius: 8px !important;       /* Bo góc nhẹ cho hiện đại */
+    padding: 10px 12px !important;      /* Tạo không gian bên trong ô */
+    background-color: #fff !important;   /* Nền trắng sạch sẽ */
+    font-weight: 500;
+    color: #212529;
+    transition: all 0.2s ease-in-out;
 }
 
-#employee-card-list .card:active {
-    transform: scale(0.98);
+/* Hiệu ứng khi click chuột vào ô (Focus) */
+.custom-field .form-control:focus, 
+.custom-field .form-select:focus {
+    border-color: #0d6efd !important;    /* Đổi màu khung sang xanh khi focus */
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15) !important; /* Đổ bóng nhẹ */
+    outline: none;
 }
 
-#empTab {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important; /* Tuyệt đối không cho xuống hàng */
-    width: 100%;
-    border-bottom: 1px solid #eee;
-    padding: 0;
-    margin: 0;
-}
-
-#empTab .nav-item {
-    flex: 1 1 33.33%; /* Ép mỗi tab chiếm đúng 1/3 chiều ngang */
-    max-width: 33.33%;
-}
-
-#empTab .nav-link {
-    width: 100%;
-    border: none !important;
-    color: #6c757d;
-    font-size: 11px; /* Giảm nhẹ cỡ chữ để vừa các máy nhỏ như iPhone SE */
-    padding: 10px 2px; /* Giảm padding trái phải tối đa */
-    background: none;
-    position: relative;
-    white-space: nowrap; /* Không cho chữ nhảy xuống dòng */
-    text-align: center;
-}
-
-#empTab .nav-link i {
+/* Định dạng nhãn Label phía trên input */
+.custom-field label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #495057;
+    margin-bottom: 6px;
     display: block;
-    font-size: 14px;
-    margin-bottom: 2px;
+    text-transform: uppercase;
+}
+/* Class định danh riêng để không lỗi các trang khác */
+.aqua-tabs {
+    gap: 3rem; /* Khoảng cách giữa các tab */
+    position: relative;
+    padding-bottom: 0;
 }
 
-#empTab .nav-link.active {
-    color: #0d6efd !important;
-    font-weight: bold;
+.aqua-tabs .nav-item {
+    margin-bottom: -1px; /* Đè lên border của card-header nếu có */
 }
 
-#empTab .nav-link.active::after {
+.aqua-tabs .nav-link {
+    border: none !important;
+    background: transparent !important;
+    color: #6c757d; /* Màu xám cho tab chưa chọn */
+    font-weight: 500;
+    padding: 1rem 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+}
+
+/* Icon trong tab */
+.aqua-tabs .nav-link i {
+    font-size: 1.1rem;
+    color: #94a3b8;
+}
+
+/* Khi tab được chọn */
+.aqua-tabs .nav-link.active {
+    color: #0061f2 !important; /* Màu xanh đậm hiện đại */
+    font-weight: 700;
+}
+
+.aqua-tabs .nav-link.active i {
+    color: #0061f2 !important;
+}
+
+/* Đường gạch dưới dài chuẩn như ảnh mẫu */
+.aqua-tabs .nav-link.active::after {
     content: "";
     position: absolute;
     bottom: 0;
     left: 0;
-    right: 0;
+    width: 100%; /* Trải dài hết chiều ngang của tab */
     height: 3px;
-    background: #0d6efd;
+    background-color: #0061f2;
+    border-radius: 2px;
 }
 
-#modalDetail .modal-header {
-    padding: 15px 20px;
-}
-@media (min-width: 768px) {
-    .border-md-end {
-        border-right: 1px solid #eee !important;
-    }
+/* Hiệu ứng hover nhẹ */
+.aqua-tabs .nav-link:hover {
+    color: #495057;
 }
 
-.x-small {
-    font-size: 10px;
-    letter-spacing: 0.5px;
+.avatar-preview {
+    transition: all 0.3s ease;
+    cursor: pointer;
 }
 
-#tab-info-content .form-control:focus, 
-#tab-info-content .form-select:focus {
-    background-color: #fff !important;
-    border: 1px solid #0d6efd !important;
-    box-shadow: none !important;
+.avatar-preview:hover {
+    border-color: #0d6efd !important;
+    background-color: #f1f5f9 !important;
 }
 
-#tab-info-content label {
-    margin-bottom: 2px;
-    display: block;
+#imgOut {
+    border-radius: 50%;
 }
