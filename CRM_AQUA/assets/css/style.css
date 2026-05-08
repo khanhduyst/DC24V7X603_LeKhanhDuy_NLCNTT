@@ -15,6 +15,43 @@ body {
   overflow-x: hidden;
 }
 
+.input-group {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.15s ease-in-out;
+  background-color: #fff;
+}
+
+.input-group .input-group-text,
+.input-group .form-control,
+.input-group .form-select {
+  border: none !important;
+}
+
+.input-group:focus-within {
+  border-color: #0d6efd !important;
+  box-shadow: none !important;
+}
+
+.input-group .form-control:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.table-responsive {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#employee-card-list .card {
+  border-left: 4px solid #0d6efd !important;
+}
+
+.x-small {
+  font-size: 11px;
+}
+
 #header-container {
   position: sticky;
   top: 0;
@@ -580,4 +617,145 @@ input[type="date"] {
     border-end: none !important;
     border-right: none !important;
   }
+}
+
+/* ================ POS ================ */
+
+.card {
+  border-radius: 10px !important;
+}
+.card-header {
+  border-bottom: 1px solid #f0f0f0 !important;
+  color: #444;
+}
+.cart-item {
+  padding: 12px 0;
+  border-bottom: 1px solid #f8f9fa;
+}
+.qty-input {
+  width: 40px;
+  text-align: center;
+  border: none;
+  background: #f8f9fa;
+  font-weight: bold;
+}
+.border-dashed {
+  border-style: dashed !important;
+}
+#search-results {
+  position: absolute;
+  top: 100%; /* Luôn nằm dưới ô input-group */
+  left: 0;
+  right: 0;
+  z-index: 1050;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 0 0 8px 8px;
+  max-height: 300px; /* Giới hạn chiều cao nếu nhiều sản phẩm */
+  overflow-y: auto; /* Hiện thanh cuộn nếu quá dài */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+/* Sửa nút thanh toán để chữ không bị tràn */
+#payment-methods .btn {
+  border-radius: 5px;
+  font-size: 13px;
+}
+
+#customer-results-container {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1050;
+  background: white;
+  border: 1px solid #dee2e6;
+  max-height: 200px;
+  overflow-y: auto;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.customer-item {
+  padding: 8px 12px;
+  border-bottom: 1px solid #f8f9fa;
+  cursor: pointer;
+}
+.customer-item:hover {
+  background-color: #f0f4ff;
+}
+.add-new-cust-item {
+  background-color: #f8f9ff;
+  border-top: 1px dashed #d0d7ff;
+  color: #0d6efd;
+  font-weight: 600;
+}
+
+.is-invalid {
+  border-color: #dc3545 !important;
+}
+.invalid-feedback {
+  display: none;
+  color: #dc3545;
+  font-size: 11px;
+  margin-top: 4px;
+}
+.is-invalid ~ .invalid-feedback {
+  display: block;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+.shake-error {
+  animation: shake 0.2s ease-in-out 0s 2;
+}
+
+@media (max-width: 991.98px) {
+  /* Khoảng cách cho cột khách hàng khi nhảy lên đầu */
+  .order-1.col-lg-5 {
+    margin-bottom: 1.5rem;
+  }
+  /* Fix các nút thanh toán xếp chồng lên nhau trên mobile để dễ bấm */
+  #payment-methods .col-12 {
+    margin-bottom: 5px;
+  }
+  .main-content {
+    padding: 10px !important;
+  }
+  #search-results {
+    width: 100%;
+    left: 0;
+  }
+}
+
+#customer-results-container {
+  position: absolute;
+  top: 100%; /* Hít sát đáy của ô nhập liệu */
+  left: 0;
+  right: 0;
+  z-index: 1060; /* Đảm bảo đè lên khung "Chưa có thông tin khách hàng" */
+  background: white;
+  border: 1px solid #dee2e6;
+  max-height: 250px;
+  overflow-y: auto;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Fix lỗi tương tự cho phần tìm sản phẩm nếu bạn gặp phải */
+.card-body.position-relative {
+  position: relative;
+}
+
+#payment-methods .btn-primary {
+  box-shadow: 0 4px 10px rgba(13, 110, 253, 0.4);
+  transform: translateY(-1px);
 }

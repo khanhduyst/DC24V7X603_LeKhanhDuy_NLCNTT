@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM AQUA - Dashboard</title>
+
+    <!-- Bootstrap 5 CSS & Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/test.css">
+</head>
+
+<body>
+
+    <!-- Container để Autoload Sidebar -->
+    <div id="sidebar-container"></div>
+
+    <main class="main-content">
+        <div id="header-container"></div>
+
+        <div class="container-fluid py-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="fw-bold text-primary mb-0">QUẢN LÝ NHÂN VIÊN</h4>
+                <button class="btn btn-primary shadow-sm" onclick="openAddEmployeeModal()">
+                    <i class="bi bi-person-plus-fill me-2"></i>Thêm mới
+                </button>
+            </div>
+
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent border-end-0">
+                                    <i class="bi bi-search text-muted"></i>
+                                </span>
+                                <input type="text" id="search-emp" class="form-control border-start-0 ps-0"
+                                    placeholder="Tìm tên, mã hoặc số điện thoại..." onkeyup="filterEmployees()">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <select id="filter-role" class="form-select" onchange="filterEmployees()">
+                                <option value="all">Tất cả chức vụ</option>
+                                <option value="Kỹ thuật viên">Kỹ thuật viên</option>
+                                <option value="Bán hàng">Bán hàng</option>
+                                <option value="Quản lý">Quản lý</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-none d-md-block card border-0 shadow-sm">
+
+                <div class="card-body p-0">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="ps-4">Mã NV</th>
+                                <th>Họ tên</th>
+                                <th>Số điện thoại</th>
+                                <th>Chức vụ</th>
+                                <th class="text-end pe-4">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="employee-table-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="employee-card-list" class="d-md-none">
+            </div>
+        </div>
+
+    </main>
+
+    <div class="modal fade" id="modalDetail" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-bottom bg-light">
+                    <h5 class="modal-title fw-bold text-primary" id="modal-emp-name">Chi tiết nhân viên</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <ul class="nav nav-tabs border-0 flex-nowrap" id="empTab" role="tablist">
+                        <li class="nav-item">
+                            <button class="nav-link active" id="info-tab" data-bs-toggle="tab"
+                                data-bs-target="#info-pane" type="button">
+                                <i class="bi bi-person-badge"></i>Thông tin
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" id="work-tab" data-bs-toggle="tab" data-bs-target="#work-pane"
+                                type="button">
+                                <i class="bi bi-calendar-event"></i>Công việc
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" id="kpi-tab" data-bs-toggle="tab" data-bs-target="#kpi-pane"
+                                type="button">
+                                <i class="bi bi-bar-chart"></i>KPI
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content p-4" id="empTabContent">
+
+                        <div class="tab-pane fade show active" id="info-pane" role="tabpanel" tabindex="0">
+                            <div id="tab-info-content">
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="work-pane" role="tabpanel" tabindex="0">
+                            <div class="p-3 text-center text-muted border rounded">
+                                <i class="bi bi-calendar3 fs-2"></i>
+                                <p class="mt-2 mb-0">Chức năng lịch làm việc đang được phát triển</p>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="kpi-pane" role="tabpanel" tabindex="0">
+                            <div class="p-3 text-center text-muted border rounded">
+                                <i class="bi bi-bar-chart-line fs-2"></i>
+                                <p class="mt-2 mb-0">Dữ liệu doanh số đang được cập nhật</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer border-top bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" onclick="editEmployee()">
+                        <i class="bi bi-pencil-square me-2"></i>Chỉnh sửa
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="assets/js/main.js"></script>
+    <script src="assets/js/pages/employees.js"></script>
+</body>
+
+</html>

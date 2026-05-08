@@ -25,11 +25,17 @@
                             <h6 class="fw-bold mb-0 text-uppercase small">Thông tin sản phẩm</h6>
                         </div>
                         <div class="card-body">
-                            <div class="input-group mb-3">
-                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
-                                <input type="text" id="search-product"
-                                    class="form-control bg-light border-start-0 shadow-none"
-                                    placeholder="Tìm theo mã hoặc tên sản phẩm...">
+                            <div class="position-relative mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i
+                                            class="bi bi-search"></i></span>
+                                    <input type="text" id="search-product"
+                                        class="form-control bg-light border-start-0 shadow-none"
+                                        placeholder="Tìm theo mã hoặc tên sản phẩm...">
+                                </div>
+                                <div id="search-results" class="list-group shadow-sm d-none"
+                                    style="position: absolute; top: 100%; left: 0; right: 0; z-index: 1050; background: white;">
+                                </div>
                             </div>
                             <div id="search-results" class="list-group shadow-sm mb-3 d-none"></div>
                             <div id="cart-list" class="mt-2" style="min-height: 200px;">
@@ -120,24 +126,19 @@
                             </div>
                             <div class="mb-2">
                                 <label class="small fw-bold text-muted mb-2">Hình thức thanh toán</label>
-                                <div class="row g-2" id="payment-methods">
-                                    <!-- Sửa lại col để không bị lỗi trên mobile -->
-                                    <div class="col-12 col-sm-4">
-                                        <button class="btn btn-primary w-100 py-2 small fw-bold" data-method="cash">Tiền
-                                            mặt</button>
+                                <div id="payment-methods" class="row g-2">
+                                    <div class="col-6 col-md-3">
+                                        <button class="btn btn-primary w-100" data-method="cash">Tiền mặt</button>
                                     </div>
-                                    <div class="col-12 col-sm-4">
-                                        <button class="btn btn-outline-primary w-100 py-2 small fw-bold"
+                                    <div class="col-6 col-md-3">
+                                        <button class="btn btn-outline-primary w-100"
                                             data-method="vietqr">VietQR</button>
                                     </div>
-                                    <div class="col-12 col-sm-4">
-                                        <button class="btn btn-outline-primary w-100 py-2 small fw-bold"
-                                            data-method="vnpay">VNPay</button>
+                                    <div class="col-6 col-md-3">
+                                        <button class="btn btn-outline-primary w-100" data-method="vnpay">VNPay</button>
                                     </div>
-                                    <div class="col-12 col-sm-3">
-                                        <button class="btn btn-outline-danger w-100 py-2 small fw-bold" data-method="momo">
-                                            <i class="bi bi-wallet2 me-1"></i> MoMo
-                                        </button>
+                                    <div class="col-6 col-md-3">
+                                        <button class="btn btn-outline-primary w-100" data-method="momo">MoMo</button>
                                     </div>
                                 </div>
                             </div>
