@@ -84,76 +84,63 @@ function updateLiveInfo() {
 }
 
 async function takePhoto() {
-  const video = document.getElementById("video");
-  const canvas = document.getElementById("canvas");
-  const photoPreview = document.getElementById("photo-preview");
-  const finalAddress = document.getElementById("final-address");
-  const previewContainer = document.getElementById("preview-container");
-  const ctx = canvas.getContext("2d");
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const photoPreview = document.getElementById('photo-preview');
+    const finalAddress = document.getElementById('final-address');
+    const ctx = canvas.getContext('2d');
 
-  // 1. Chụp ảnh ngay lập tức để lấy khung hình
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    // 1. Chụp ảnh trước
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    ctx.drawImage(video, 0, 0);
 
-  if (navigator.geolocation) {
-    // Thông báo cho nhân viên biết là máy đang làm việc
-    finalAddress.innerHTML =
-      '<span class="text-warning">Đang xác thực vị trí...</span>';
+    if (navigator.geolocation) {
+        finalAddress.innerText = "Đang kết nối GPS...";
 
-    navigator.geolocation.getCurrentPosition(
-      async (pos) => {
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
 
-        try {
-          // 2. Gọi API lấy địa chỉ
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`,
-          );
-          const data = await response.json();
+            try {
+                // 2. Gọi API
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`);
+                const data = await response.json();
+                
+                // Lấy địa chỉ thô nhất có thể để test
+                const displayAddr = data.display_name; 
+                
+                // 3. HIỆN ALERT ĐỂ KIỂM TRA TRÊN ĐIỆN THOẠI
+                // Nếu cái này hiện ra địa chỉ nghĩa là API chạy tốt
+                // alert("Địa chỉ lấy được: " + displayAddr);
 
-          const a = data.address;
-          let ap = a.road || a.village || a.hamlet || "";
-          let huyen = a.district || a.county || a.town || "";
-          let tinh = a.city || a.state || a.province || "";
-          let cleanAddr = [ap, huyen, tinh].filter(Boolean).join(", ");
+                // 4. Ép ghi ra ngoài màn hình
+                if (finalAddress) {
+                    finalAddress.innerHTML = "<b>" + displayAddr + "</b>";
+                }
 
-          if (!cleanAddr) cleanAddr = data.display_name;
+                // 5. Đóng dấu lên ảnh
+                ctx.fillStyle = "rgba(0,0,0,0.5)";
+                ctx.fillRect(0, canvas.height - 80, canvas.width, 80);
+                ctx.fillStyle = "white";
+                ctx.font = "20px Arial";
+                ctx.fillText(displayAddr.substring(0, 50) + "...", 20, canvas.height - 30);
 
-          // --- BƯỚC QUAN TRỌNG ---
-          // Cập nhật địa chỉ vào biến Global hoặc trực tiếp ra HTML
-          finalAddress.innerText = cleanAddr;
-          if (document.getElementById("final-coords")) {
-            document.getElementById("final-coords").innerText =
-              `GPS: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
-          }
+                // 6. Trả ảnh ra ngoài
+                photoPreview.src = canvas.toDataURL('image/jpeg');
+                document.getElementById('preview-container').classList.remove('d-none');
+                
+                // 7. Đóng camera
+                closeCamera();
 
-          // Vẽ dấu lên ảnh (đã có địa chỉ rồi mới vẽ)
-          ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-          ctx.fillRect(0, canvas.height - 100, canvas.width, 100);
-          ctx.fillStyle = "white";
-          ctx.font = "bold 24px Arial";
-          ctx.fillText(cleanAddr, 20, canvas.height - 40);
-
-          // Hiển thị ảnh ra ngoài
-          photoPreview.src = canvas.toDataURL("image/jpeg");
-          previewContainer.classList.remove("d-none");
-
-          // CHỈ ĐÓNG CAMERA SAU KHI MỌI THỨ XONG
-          setTimeout(() => {
-            closeCamera();
-          }, 300); // Đợi 0.3s cho chắc chắn
-        } catch (error) {
-          finalAddress.innerText = "Lỗi kết nối mạng, hãy thử lại!";
-          console.error(error);
-        }
-      },
-      (err) => {
-        finalAddress.innerText = "Lỗi: Bạn chưa bật định vị GPS!";
-      },
-    );
-  }
+            } catch (err) {
+                alert("Lỗi gọi API: " + err.message);
+                finalAddress.innerText = "Lỗi mạng!";
+            }
+        }, (error) => {
+            alert("Lỗi GPS: " + error.message);
+        });
+    }
 }
 
 function handleCaptureAndCheckin() {
