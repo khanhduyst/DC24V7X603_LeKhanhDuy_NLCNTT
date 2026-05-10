@@ -19,13 +19,12 @@ async function startCamera() {
     cameraModal.show();
     updateLiveStamp();
   } catch (err) {
-    // Thông báo lỗi khi không mở được camera
     Swal.fire({
-      title: "Lỗi Camera!",
-      text: "Không thể truy cập camera. Vui lòng cấp quyền hoặc kiểm tra thiết bị.",
+      title: "Truy cập thất bại",
+      text: "Hệ thống không thể kết nối với thiết bị Camera. Vui lòng kiểm tra quyền truy cập của trình duyệt.",
       icon: "error",
       confirmButtonColor: "#0d6efd",
-      confirmButtonText: "Đã hiểu",
+      confirmButtonText: "Xác nhận",
     });
   }
 }
@@ -37,7 +36,7 @@ function updateLiveStamp() {
       const lng = pos.coords.longitude.toFixed(4);
       const liveDataEl = document.getElementById("live-data");
       if (liveDataEl) {
-        liveDataEl.innerText = `${new Date().toLocaleDateString("vi-VN")} | GPS: ${lat}, ${lng}`;
+        liveDataEl.innerText = `${new Date().toLocaleDateString("vi-VN")} | Tọa độ GPS: ${lat}, ${lng}`;
       }
     });
   }
@@ -48,10 +47,9 @@ async function processCapture() {
   const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d");
 
-  // Hiển thị Loading trong khi xử lý
   Swal.fire({
-    title: 'Đang xử lý...',
-    text: 'Đang xác thực tọa độ và địa chỉ',
+    title: 'Đang xử lý dữ liệu',
+    text: 'Hệ thống đang xác thực vị trí và trích xuất địa chỉ...',
     allowOutsideClick: false,
     didOpen: () => {
       Swal.showLoading();
@@ -81,28 +79,29 @@ async function processCapture() {
         const cleanAddr = [ap, huyen, tinh].filter(Boolean).join(", ");
 
         finalAddr.innerText = cleanAddr || data.display_name;
-        document.getElementById("final-coords").innerText = `GPS: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+        document.getElementById("final-coords").innerText = `Tọa độ chi tiết: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
 
         document.getElementById("photo-preview").src = canvas.toDataURL("image/jpeg");
         document.getElementById("preview-container").classList.remove("d-none");
         document.getElementById("start-camera-btn").classList.add("d-none");
         
-        // Đóng Loading sau khi hoàn tất
         Swal.close();
       } catch (e) {
         Swal.fire({
           icon: 'warning',
-          title: 'Lưu ý',
-          text: 'Không thể lấy địa chỉ chi tiết, nhưng ảnh đã được lưu.',
+          title: 'Cảnh báo hệ thống',
+          text: 'Không thể truy xuất địa chỉ chi tiết từ máy chủ. Vui lòng kiểm tra kết nối mạng.',
+          confirmButtonColor: "#0d6efd",
         });
-        finalAddr.innerText = "Không lấy được địa chỉ mạng.";
+        finalAddr.innerText = "Dữ liệu địa chỉ không khả dụng.";
       }
       closeCamera();
     }, (err) => {
         Swal.fire({
             icon: 'error',
-            title: 'Lỗi GPS',
-            text: 'Vui lòng bật định vị để chụp ảnh check-in!',
+            title: 'Lỗi định vị',
+            text: 'Yêu cầu kích hoạt GPS để thực hiện tính năng Check-in.',
+            confirmButtonColor: "#0d6efd",
         });
     });
   }
@@ -123,36 +122,33 @@ function handleCheckIn() {
   const customer = document.getElementById("customerSelect").value;
   const previewImg = document.getElementById("photo-preview").src;
 
-  // Kiểm tra khách hàng
   if (!customer || customer.includes("--")) {
     Swal.fire({
-      title: "Thiếu thông tin!",
-      text: "Duy ơi, em chưa chọn khách hàng/đại lý kìa.",
+      title: "Thông tin không hợp lệ",
+      text: "Vui lòng chọn Khách hàng hoặc Đại lý trước khi xác nhận.",
       icon: "warning",
       confirmButtonColor: "#0d6efd",
-      confirmButtonText: "Để em chọn lại",
+      confirmButtonText: "Quay lại",
     });
     return;
   }
 
-  // Kiểm tra xem đã chụp hình chưa
-  if (!previewImg || previewImg.includes("window.location")) {
+  if (!previewImg || previewImg === window.location.href) {
      Swal.fire({
-      title: "Chưa chụp ảnh!",
-      text: "Em cần chụp ảnh tại ao để làm bằng chứng check-in nhé.",
+      title: "Thiếu dữ liệu hình ảnh",
+      text: "Vui lòng cung cấp hình ảnh thực tế tại địa điểm check-in.",
       icon: "info",
       confirmButtonColor: "#0d6efd",
     });
     return;
   }
 
-  // Thông báo thành công cuối cùng
   Swal.fire({
-    title: "Thành công!",
-    text: "Đã ghi nhận hình ảnh và vị trí check-in của Duy.",
+    title: "Check-in thành công",
+    text: "Dữ liệu vị trí và hình ảnh đã được ghi nhận trên hệ thống.",
     icon: "success",
     confirmButtonColor: "#0d6efd",
-    confirmButtonText: "Tuyệt vời",
-    timer: 2500,
+    confirmButtonText: "Hoàn tất",
+    timer: 3000,
   });
 }
