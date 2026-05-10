@@ -74,28 +74,23 @@
                     </div>
                     <div class="custom-field mb-4 text-start">
                         <label class="small fw-bold text-muted text-uppercase">Hình ảnh thực tế tại ao</label>
-                        <div class="camera-module bg-light rounded-3 p-3 text-center border">
-                            <div id="camera-container" class="mb-2 d-none">
-                                <video id="video" width="100%" height="auto" autoplay
-                                    class="rounded-3 shadow-sm"></video>
-                                <button type="button" class="btn btn-sm btn-danger mt-2" onclick="takePhoto()">
-                                    <i class="bi bi-camera-fill me-1"></i> Chụp hình
-                                </button>
-                            </div>
+                        <div class="custom-field mb-4 text-start">
+                            <label class="small fw-bold text-muted text-uppercase">Hình ảnh thực tế tại ao</label>
+                            <div class="camera-module bg-light rounded-3 p-2 text-center border">
 
-                            <div id="preview-container" class="d-none">
-                                <canvas id="canvas" class="d-none"></canvas>
-                                <img id="photo-preview" src="" class="img-fluid rounded-3 shadow-sm mb-2">
-                                <button type="button" class="btn btn-sm btn-outline-secondary mt-2"
-                                    onclick="retakePhoto()">
-                                    <i class="bi bi-arrow-clockwise me-1"></i> Chụp lại
+                                <button type="button" id="start-camera-btn"
+                                    class="btn btn-outline-primary py-3 w-100 fw-bold" onclick="startCamera()">
+                                    <i class="bi bi-camera me-2"></i> Mở Camera báo cáo
                                 </button>
-                            </div>
 
-                            <button type="button" id="start-camera-btn" class="btn btn-outline-primary py-3 w-100"
-                                onclick="startCamera()">
-                                <i class="bi bi-camera me-2"></i> Mở Camera báo cáo
-                            </button>
+                                <div id="preview-container" class="d-none mt-2">
+                                    <img id="photo-preview" src="" class="img-fluid rounded-3 shadow-sm mb-2">
+                                    <button type="button" class="btn btn-sm btn-light text-muted mt-1 fw-bold"
+                                        onclick="retakePhoto()">
+                                        <i class="bi bi-arrow-clockwise me-1"></i> Chụp lại
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <button class="btn btn-primary w-100 py-3 rounded-3 shadow fw-bold" onclick="handleCheckIn()">
@@ -123,6 +118,34 @@
 
     </main>
     <!-- Dưới cùng file index.html -->
+
+    <div class="modal fade" id="cameraModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content bg-black border-0">
+            <div class="modal-body p-0 position-relative overflow-hidden">
+                
+                <video id="video" autoplay playsinline class="w-100 h-100" style="object-fit: cover;"></video>
+
+                <div class="camera-watermark position-absolute bottom-0 start-0 p-3 text-white w-100" style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
+                    <p id="live-time" class="small mb-1 fw-bold"></p>
+                    <p id="live-location" class="small mb-0 opacity-75 italic"></p>
+                </div>
+
+                <div class="position-absolute bottom-0 start-50 translate-middle-x mb-5 pb-4">
+                    <button type="button" class="btn-capture" onclick="takePhoto()">
+                        <div class="btn-capture-inner"></div>
+                    </button>
+                </div>
+
+                <button type="button" class="btn-close-camera position-absolute top-0 end-0 m-3" onclick="closeCamera()">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+                
+                <canvas id="canvas" class="d-none"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="assets/js/main.js"></script>
