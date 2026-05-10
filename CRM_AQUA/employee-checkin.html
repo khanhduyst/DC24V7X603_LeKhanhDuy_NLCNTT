@@ -117,24 +117,21 @@
 
     </main>
 
-    <div class="modal fade" id="cameraModal" tabindex="-1" data-bs-backdrop="static" style="z-index: 1060;">
-        <div class="modal-dialog modal-fullscreen m-0 p-0">
-            <div class="modal-content border-0 bg-black">
-                <div class="modal-body p-0 position-relative overflow-hidden" style="width: 100vw; height: 100vh;">
+    <div class="modal fade" id="cameraModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-fullscreen m-0">
+            <div class="modal-content border-0">
+                <div class="modal-body">
 
                     <video id="video" autoplay playsinline></video>
 
-                    <div class="position-absolute bottom-0 start-0 w-100 p-4 pb-5"
-                        style="background: linear-gradient(transparent, rgba(0,0,0,0.8)); z-index: 10;">
-
-                        <div class="text-white mb-4 text-center">
-                            <div id="live-address" class="fw-bold text-uppercase small">Đang lấy địa chỉ...</div>
-                            <div id="live-data" class="small opacity-75">--/--/---- | GPS: 0.0000, 0.0000</div>
+                    <div class="camera-overlay-bottom">
+                        <div class="text-center text-white mb-4">
+                            <div id="live-address" class="fw-bold small px-3">ĐANG XÁC ĐỊNH VỊ TRÍ...</div>
+                            <div id="live-data" class="small opacity-75"></div>
                         </div>
 
-                        <div class="d-flex justify-content-center align-items-center mb-3">
-                            <button type="button" class="btn-capture-wrapper" onclick="handleCaptureAndCheckin()"
-                                style="border: none; background: none; padding: 0;">
+                        <div class="d-flex justify-content-center align-items-center mb-5">
+                            <button type="button" class="btn-capture-wrapper" onclick="handleCaptureAndCheckin()">
                                 <div class="btn-capture-outer">
                                     <div class="btn-capture-inner">
                                         <i class="bi bi-geo-alt-fill text-primary fs-3"></i>
@@ -144,7 +141,7 @@
                         </div>
                     </div>
 
-                    <button type="button" class="btn-close-camera" onclick="closeCamera()" style="z-index: 11;">
+                    <button type="button" class="btn-close-camera" onclick="closeCamera()" style="z-index: 99;">
                         <i class="bi bi-x-lg"></i>
                     </button>
 

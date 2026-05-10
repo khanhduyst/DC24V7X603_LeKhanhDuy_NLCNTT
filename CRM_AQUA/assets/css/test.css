@@ -118,3 +118,38 @@
   align-items: center;
   justify-content: center;
 }
+
+/* Ép Modal Modal Body không được có khoảng trắng */
+#cameraModal .modal-body {
+  padding: 0 !important;
+  margin: 0 !important;
+  background-color: #000 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  overflow: hidden !important;
+}
+
+/* Ép Video phải phủ kín toàn bộ màn hình điện thoại */
+#video {
+  position: fixed; /* Ép cố định */
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: 1;
+  transform: translate(-50%, -50%) scale(1.1); /* Phóng to nhẹ để chắc chắn tràn viền */
+  object-fit: cover !important;
+}
+
+/* Đưa lớp phủ thông tin lên trên cùng */
+.camera-overlay-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  padding-bottom: env(safe-area-inset-bottom); /* Hỗ trợ iPhone có tai thỏ */
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+}
