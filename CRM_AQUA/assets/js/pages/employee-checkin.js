@@ -87,63 +87,72 @@ async function takePhoto() {
   const video = document.getElementById("video");
   const canvas = document.getElementById("canvas");
   const photoPreview = document.getElementById("photo-preview");
-  const finalAddress = document.getElementById("final-address"); // Ô chữ ngoài màn hình
+  const finalAddress = document.getElementById("final-address");
   const previewContainer = document.getElementById("preview-container");
   const ctx = canvas.getContext("2d");
 
+  // 1. Chụp ảnh ngay lập tức để lấy khung hình
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
   if (navigator.geolocation) {
-    // Hiện thông báo đang xử lý ở ngoài màn hình luôn
-    finalAddress.innerText = "Đang lấy địa chỉ thực tế...";
+    // Thông báo cho nhân viên biết là máy đang làm việc
+    finalAddress.innerHTML =
+      '<span class="text-warning">Đang xác thực vị trí...</span>';
 
-    navigator.geolocation.getCurrentPosition(async (pos) => {
-      const lat = pos.coords.latitude;
-      const lng = pos.coords.longitude;
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
 
-      try {
-        // Gọi API lấy địa chỉ
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`,
-        );
-        const data = await response.json();
+        try {
+          // 2. Gọi API lấy địa chỉ
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`,
+          );
+          const data = await response.json();
 
-        // Bóc tách địa chỉ chi tiết (Ấp, Huyện, Tỉnh)
-        const a = data.address;
-        let ap = a.road || a.village || a.hamlet || "";
-        let huyen = a.district || a.county || a.town || "";
-        let tinh = a.city || a.state || a.province || "";
-        let cleanAddr = [ap, huyen, tinh].filter(Boolean).join(", ");
+          const a = data.address;
+          let ap = a.road || a.village || a.hamlet || "";
+          let huyen = a.district || a.county || a.town || "";
+          let tinh = a.city || a.state || a.province || "";
+          let cleanAddr = [ap, huyen, tinh].filter(Boolean).join(", ");
 
-        if (!cleanAddr) cleanAddr = data.display_name;
+          if (!cleanAddr) cleanAddr = data.display_name;
 
-        // --- QUAN TRỌNG: CẬP NHẬT RA MÀN HÌNH CHÍNH TẠI ĐÂY ---
-        finalAddress.innerText = cleanAddr;
-        if (document.getElementById("final-coords")) {
-          document.getElementById("final-coords").innerText =
-            `GPS: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+          // --- BƯỚC QUAN TRỌNG ---
+          // Cập nhật địa chỉ vào biến Global hoặc trực tiếp ra HTML
+          finalAddress.innerText = cleanAddr;
+          if (document.getElementById("final-coords")) {
+            document.getElementById("final-coords").innerText =
+              `GPS: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+          }
+
+          // Vẽ dấu lên ảnh (đã có địa chỉ rồi mới vẽ)
+          ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+          ctx.fillRect(0, canvas.height - 100, canvas.width, 100);
+          ctx.fillStyle = "white";
+          ctx.font = "bold 24px Arial";
+          ctx.fillText(cleanAddr, 20, canvas.height - 40);
+
+          // Hiển thị ảnh ra ngoài
+          photoPreview.src = canvas.toDataURL("image/jpeg");
+          previewContainer.classList.remove("d-none");
+
+          // CHỈ ĐÓNG CAMERA SAU KHI MỌI THỨ XONG
+          setTimeout(() => {
+            closeCamera();
+          }, 300); // Đợi 0.3s cho chắc chắn
+        } catch (error) {
+          finalAddress.innerText = "Lỗi kết nối mạng, hãy thử lại!";
+          console.error(error);
         }
-
-        // Vẽ dấu lên ảnh
-        ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-        ctx.fillRect(0, canvas.height - 100, canvas.width, 100);
-        ctx.fillStyle = "white";
-        ctx.font = "bold 24px Arial";
-        ctx.fillText(cleanAddr, 20, canvas.height - 40);
-
-        // Hiển thị ảnh preview
-        photoPreview.src = canvas.toDataURL("image/jpeg");
-        previewContainer.classList.remove("d-none");
-
-        // Tắt camera và đóng Modal
-        closeCamera();
-      } catch (error) {
-        finalAddress.innerText = "Không lấy được địa chỉ (Lỗi mạng)";
-        closeCamera();
-      }
-    });
+      },
+      (err) => {
+        finalAddress.innerText = "Lỗi: Bạn chưa bật định vị GPS!";
+      },
+    );
   }
 }
 
