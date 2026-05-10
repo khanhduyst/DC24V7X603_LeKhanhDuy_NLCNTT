@@ -84,63 +84,140 @@ function updateLiveInfo() {
 }
 
 async function takePhoto() {
-    console.log("Đã bấm nút chụp!"); // Kiểm tra xem nút có ăn lệnh không
-    
-    const video = document.querySelector('#video');
-    const canvas = document.querySelector('#canvas');
-    const photoPreview = document.querySelector('#photo-preview');
-    const finalAddress = document.querySelector('#final-address');
+  console.log("Đã bấm nút chụp!"); // Kiểm tra xem nút có ăn lệnh không
 
-    if (!video || !finalAddress) {
-        console.error("LỖI: Không tìm thấy thẻ video hoặc final-address trong HTML!");
-        alert("Lỗi giao diện, hãy kiểm tra Console Eruda");
-        return;
-    }
+  const video = document.querySelector("#video");
+  const canvas = document.querySelector("#canvas");
+  const photoPreview = document.querySelector("#photo-preview");
+  const finalAddress = document.querySelector("#final-address");
 
-    // Chụp ảnh ngay
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    canvas.getContext('2d').drawImage(video, 0, 0);
+  if (!video || !finalAddress) {
+    console.error(
+      "LỖI: Không tìm thấy thẻ video hoặc final-address trong HTML!",
+    );
+    alert("Lỗi giao diện, hãy kiểm tra Console Eruda");
+    return;
+  }
 
-    if (navigator.geolocation) {
-        finalAddress.innerText = "Đang định vị GPS...";
-        console.log("Đang gọi GPS...");
+  // Chụp ảnh ngay
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext("2d").drawImage(video, 0, 0);
 
-        navigator.geolocation.getCurrentPosition(async (pos) => {
-            const lat = pos.coords.latitude;
-            const lng = pos.coords.longitude;
-            console.log("Tọa độ lấy được:", lat, lng);
+  if (navigator.geolocation) {
+    finalAddress.innerText = "Đang định vị GPS...";
+    console.log("Đang gọi GPS...");
 
-            try {
-                // Gọi API lấy địa chỉ
-                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
-                const data = await response.json();
-                const displayAddr = data.display_name;
-                
-                console.log("Địa chỉ lấy được:", displayAddr);
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        console.log("Tọa độ lấy được:", lat, lng);
 
-                // Cập nhật ra ngoài
-                finalAddress.innerText = displayAddr;
-                photoPreview.src = canvas.toDataURL('image/jpeg');
-                
-                // Hiện khung preview
-                document.querySelector('#preview-container').classList.remove('d-none');
-                
-                // Đóng camera
-                closeCamera();
-                console.log("Check-in thành công!");
+        try {
+          // Gọi API lấy địa chỉ
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
+          );
+          const data = await response.json();
+          const displayAddr = data.display_name;
 
-            } catch (err) {
-                console.error("Lỗi API:", err);
-                finalAddress.innerText = "Lỗi kết nối địa chỉ!";
-            }
-        }, (error) => {
-            console.error("Lỗi GPS:", error.message);
-            finalAddress.innerText = "Lỗi: " + error.message;
-        }, { enableHighAccuracy: true, timeout: 5000 });
-    } else {
-        console.error("Trình duyệt không hỗ trợ Geolocation");
-    }
+          console.log("Địa chỉ lấy được:", displayAddr);
+
+          // Cập nhật ra ngoài
+          finalAddress.innerText = displayAddr;
+          photoPreview.src = canvas.toDataURL("image/jpeg");
+
+          // Hiện khung preview
+          document
+            .querySelector("#preview-container")
+            .classList.remove("d-none");
+
+          // Đóng camera
+          closeCamera();
+          console.log("Check-in thành công!");
+        } catch (err) {
+          console.error("Lỗi API:", err);
+          finalAddress.innerText = "Lỗi kết nối địa chỉ!";
+        }
+      },
+      (error) => {
+        console.error("Lỗi GPS:", error.message);
+        finalAddress.innerText = "Lỗi: " + error.message;
+      },
+      { enableHighAccuracy: true, timeout: 5000 },
+    );
+  } else {
+    console.error("Trình duyệt không hỗ trợ Geolocation");
+  }
+}
+
+async function handleCheckin() {
+  // 1. Alert phát đầu tiên để biết nút có ăn hay không
+  console.log("Nút đã bấm!");
+
+  const video = document.getElementById("video");
+  const canvas = document.getElementById("canvas");
+  const photoPreview = document.getElementById("photo-preview");
+  const finalAddress = document.getElementById("final-address");
+  const previewContainer = document.getElementById("preview-container");
+
+  if (!video || !finalAddress) {
+    alert("Lỗi: Không tìm thấy ID video hoặc final-address");
+    return;
+  }
+
+  // 2. Chụp ảnh ngay
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext("2d").drawImage(video, 0, 0);
+  console.log("Đã chụp khung hình");
+
+  if (navigator.geolocation) {
+    finalAddress.innerText = "Đang định vị... (Vui lòng đợi)";
+
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        console.log("Tọa độ:", lat, lng);
+
+        try {
+          // 3. Gọi API lấy địa chỉ
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`,
+          );
+          const data = await response.json();
+
+          // Bóc tách địa chỉ Việt Nam
+          const a = data.address;
+          const ap = a.road || a.village || a.hamlet || "";
+          const huyen = a.district || a.county || a.town || "";
+          const tinh = a.city || a.state || a.province || "";
+          const cleanAddr = [ap, huyen, tinh].filter(Boolean).join(", ");
+
+          // 4. HIỂN THỊ RA MÀN HÌNH CHÍNH (ÉP BUỘC)
+          finalAddress.innerText = cleanAddr;
+          photoPreview.src = canvas.toDataURL("image/jpeg");
+          previewContainer.classList.remove("d-none");
+
+          console.log("Địa chỉ lấy được:", cleanAddr);
+
+          // 5. Đóng camera
+          closeCamera();
+        } catch (err) {
+          console.error("Lỗi API:", err);
+          finalAddress.innerText = "Lỗi lấy địa chỉ từ Server";
+          closeCamera();
+        }
+      },
+      (error) => {
+        alert("Lỗi GPS: " + error.message);
+        closeCamera();
+      },
+      { enableHighAccuracy: true, timeout: 10000 },
+    );
+  }
 }
 
 function handleCaptureAndCheckin() {
