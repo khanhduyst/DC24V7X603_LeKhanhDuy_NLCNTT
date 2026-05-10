@@ -303,3 +303,11 @@ window.filterHistory = function(type, btn) {
         }
     });
 };
+
+// Chạy khi trang web load xong
+document.querySelectorAll('tbody tr').forEach(row => {
+    const name = row.cells[0].innerText.trim();
+    const initials = name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+    // Gán vào biến CSS để CSS lấy làm Avatar
+    row.style.setProperty('--initials', `"${initials}"`);
+});

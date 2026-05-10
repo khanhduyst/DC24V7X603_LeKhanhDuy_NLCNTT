@@ -79,114 +79,456 @@
   transform: scale(0.95);
 }
 
-
 .modal-content {
-    overflow: hidden;
+  overflow: hidden;
 }
 .modal-header .btn-close {
-    font-size: 0.8rem;
+  font-size: 0.8rem;
 }
-#addCustomerForm .form-control:focus, 
+#addCustomerForm .form-control:focus,
 #addCustomerForm .form-select:focus {
+  background-color: #fff !important;
+  border: 1px solid #0d6efd !important;
+  box-shadow: none;
+}
+
+.btn-primary {
+  background-color: #0d6efd !important;
+  border: none;
+}
+
+/* Tùy chỉnh dropdown menu cho đẹp */
+.dropdown-menu {
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+.dropdown-item {
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.icon-box {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.table thead th {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 11px;
+  border-bottom: none;
+}
+
+.table tbody td {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-color: #f8f9fa;
+}
+
+.bg-primary-subtle {
+  background-color: #e7f1ff !important;
+}
+.bg-danger-subtle {
+  background-color: #f8d7da !important;
+}
+/* Container chính */
+.timeline-debt {
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 20px;
+}
+/* Đường kẻ dọc thanh mảnh */
+.timeline-debt::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #e9ecef;
+}
+/* Từng item giao dịch */
+.hist-item {
+  position: relative;
+  padding-bottom: 25px;
+}
+/* Icon node chuẩn */
+.icon-node {
+  position: absolute;
+  left: -32px;
+  top: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  border: 2px solid #dee2e6;
+  font-size: 12px;
+}
+/* Bố cục nội dung */
+.hist-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+/* Summary Box kiểu hóa đơn */
+.summary-box {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+}
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.avatar-customer {
+  width: 50px;
+  height: 50px;
+  font-size: 1.2rem;
+}
+
+.customer-card {
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.customer-card:active {
+  transform: scale(0.97);
+  background-color: #f8f9fa;
+}
+
+.btn-white {
+  background: #fff;
+  border: none;
+}
+
+/* Màu Badge tùy chỉnh */
+.bg-success-subtle {
+  background-color: #d1e7dd !important;
+}
+.bg-danger-subtle {
+  background-color: #f8d7da !important;
+}
+.bg-warning-subtle {
+  background-color: #fff3cd !important;
+}
+
+/* Container bao ngoài để khống chế khoảng cách */
+.filter-wrapper {
+  margin: 0 -15px; /* Đẩy ra sát mép màn hình mobile nhìn cho đẹp */
+  padding: 0 15px;
+  overflow: hidden;
+}
+
+/* Ép các nút nằm trên 1 hàng và cho phép vuốt ngang */
+.filter-scroll-container {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 5px;
+  gap: 8px; /* Khoảng cách giữa các nút */
+  -webkit-overflow-scrolling: touch; /* Giúp vuốt trên iPhone mượt hơn */
+}
+
+/* Ẩn thanh cuộn (Scrollbar) */
+.filter-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Style cho từng nút (Chip) */
+.filter-chip {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 50px;
+  background-color: #f1f3f5;
+  color: #5f6368;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid #e9ecef;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+/* Khi nút được chọn */
+.filter-chip.active {
+  background-color: #0d6efd;
+  color: white;
+  border-color: #0d6efd;
+  box-shadow: 0 4px 10px rgba(13, 110, 253, 0.2);
+}
+
+/* Hiệu ứng khi bấm */
+.filter-chip:active {
+  transform: scale(0.95);
+}
+
+.modal-content {
+  overflow: hidden;
+}
+.modal-header .btn-close {
+  font-size: 0.8rem;
+}
+#addCustomerForm .form-control:focus,
+#addCustomerForm .form-select:focus {
+  background-color: #fff !important;
+  border: 1px solid #0d6efd !important;
+  box-shadow: none;
+}
+
+.btn-primary {
+  background-color: #0d6efd !important;
+  border: none;
+}
+
+/* Tùy chỉnh dropdown menu cho đẹp */
+.dropdown-menu {
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+.dropdown-item {
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.icon-box {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.table thead th {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 11px;
+  border-bottom: none;
+}
+
+.table tbody td {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-color: #f8f9fa;
+}
+
+.bg-primary-subtle {
+  background-color: #e7f1ff !important;
+}
+.bg-danger-subtle {
+  background-color: #f8d7da !important;
+}
+/* Container chính */
+.timeline-debt {
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 20px;
+}
+/* Đường kẻ dọc thanh mảnh */
+.timeline-debt::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #e9ecef;
+}
+/* Từng item giao dịch */
+.hist-item {
+  position: relative;
+  padding-bottom: 25px;
+}
+/* Icon node chuẩn */
+.icon-node {
+  position: absolute;
+  left: -32px;
+  top: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  border: 2px solid #dee2e6;
+  font-size: 12px;
+}
+/* Bố cục nội dung */
+.hist-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+/* Summary Box kiểu hóa đơn */
+.summary-box {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+}
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+/* Số tiền nợ */
+.debt-amount {
+  font-size: 16px;
+  font-weight: 800;
+  color: #dc3545; /* Màu đỏ cho nổi */
+  margin-top: 2px;
+}
+
+/* Container chứa Badge và Tiền để nó nằm ngang hàng cho đẹp */
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+@media (max-width: 767px) {
+    /* 1. CHỈ XỬ LÝ KHUNG BỌC NGOÀI CỦA TRANG NÀY */
+    .wrap-debt-mobile {
+        min-width: 0 !important;
+        width: 100% !important;
+        overflow-x: hidden !important; 
+    }
+
+    /* 2. CHỈ ĐẬP CÁI 900PX CỦA BẢNG CÔNG NỢ */
+    .table-debt {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+
+    /* 3. CHỈ BIẾN BẢNG CÔNG NỢ THÀNH CARD */
+    .table-debt, .table-debt thead, .table-debt tbody, .table-debt th, .table-debt td, .table-debt tr {
+        display: block !important;
+        box-sizing: border-box !important;
+    }
+    .table-debt thead { display: none !important; }
+
+    /* CARD CHÍNH */
+    .table-debt tbody tr {
+        width: auto !important; 
+        background: #fff !important;
+        border-radius: 16px !important;
+        margin-bottom: 15px !important;
+        padding: 15px !important; 
+        border: 1px solid #e6e6e6 !important;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important;
+        position: relative;
+        overflow: hidden !important;
+    }
+
+    /* TÊN & ĐỊA CHỈ */
+    .table-debt tbody td:first-child {
+        width: auto !important;
+        position: relative !important;
+        padding: 0 0 15px 60px !important; 
+        border-bottom: 1px solid #f0f0f0 !important;
+        margin-bottom: 10px !important;
+        min-height: 55px !important;
+    }
+    .table-debt tbody td:first-child::before {
+        content: attr(data-initials);
+        position: absolute;
+        left: 0; top: 0;
+        width: 45px; height: 45px;
+        background: #e7f1ff; color: #0d6efd;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: bold; font-size: 16px;
+    }
+    .table-debt tbody td:first-child div {
+        display: block !important;
+        white-space: normal !important;
+    }
+
+    /* GIẤU HẠN MỨC */
+    .table-debt tbody td:nth-child(2) { display: none !important; }
+
+    /* CÔNG NỢ & TÌNH TRẠNG */
+    .table-debt tbody td:nth-child(3),
+    .table-debt tbody td:nth-child(4) {
+        width: auto !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 6px 0 !important; 
+        border: none !important;
+    }
+    .table-debt tbody td:nth-child(3)::before { content: "Công nợ:"; color: #888; font-size: 13px; }
+    .table-debt tbody td:nth-child(4)::before { content: "Tình trạng:"; color: #888; font-size: 13px; }
+    .table-debt tbody td:nth-child(3) .fw-bold { font-size: 17px !important; color: #dc3545 !important; margin: 0 !important; }
+    .table-debt tbody td:nth-child(3) .progress { display: none !important; }
+
+    /* HAI NÚT */
+    .table-debt tbody td:last-child {
+        width: auto !important;
+        padding: 15px 0 0 0 !important;
+        margin-top: 5px !important;
+        border-top: 1px dashed #eee !important;
+    }
+    .table-debt tbody td:last-child .d-flex {
+        display: flex !important;
+        gap: 10px !important;
+        width: 100% !important; 
+    }
+    .table-debt tbody td:last-child button {
+        flex: 1 !important;
+        padding: 8px 0 !important;
+        border-radius: 10px !important;
+        font-size: 13px !important;
+    }
+}
+
+/* --- CSS CHỈ DÀNH RIÊNG CHO TRANG KHO / KHÁCH HÀNG --- */
+
+/* Thêm class .page-inventory phía trước để không ảnh hưởng trang khác */
+.page-inventory .table thead th {
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+.page-inventory .table tbody td {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+/* Chỉ sửa Modal khi nó nằm trong form cụ thể này */
+#addMedForm .form-control:focus,
+#addMedForm .form-select:focus {
     background-color: #fff !important;
     border: 1px solid #0d6efd !important;
     box-shadow: none;
 }
 
-.btn-primary {
-    background-color: #0d6efd !important;
-    border: none;
-}
-
-/* Tùy chỉnh dropdown menu cho đẹp */
-.dropdown-menu {
-    border-radius: 12px;
-    padding: 8px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
-}
-
-.dropdown-item {
-    border-radius: 8px;
-    padding: 8px 12px;
-}
-
-.icon-box {
-    width: 45px;
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.table thead th {
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    font-size: 11px;
-    border-bottom: none;
-}
-
-.table tbody td {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    border-color: #f8f9fa;
-}
-
-.bg-primary-subtle { background-color: #e7f1ff !important; }
-.bg-danger-subtle { background-color: #f8d7da !important; }
-/* Container chính */
-.timeline-debt {
-    position: relative;
-    padding-left: 35px;
-    margin-bottom: 20px;
-}
-/* Đường kẻ dọc thanh mảnh */
-.timeline-debt::before {
-    content: '';
-    position: absolute;
-    left: 15px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: #e9ecef;
-}
-/* Từng item giao dịch */
-.hist-item {
-    position: relative;
-    padding-bottom: 25px;
-}
-/* Icon node chuẩn */
-.icon-node {
-    position: absolute;
-    left: -32px;
-    top: 0;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    background: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-    border: 2px solid #dee2e6;
-    font-size: 12px;
-}
-/* Bố cục nội dung */
-.hist-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-}
-/* Summary Box kiểu hóa đơn */
-.summary-box {
-    background: #f8f9fa;
-    border-radius: 12px;
-    padding: 20px;
-    margin-top: 20px;
-}
-.summary-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    font-size: 0.9rem;
+/* --- PHẦN CSS CÔNG NỢ (Bạn đã làm khá tốt phần @media) --- */
+/* Đảm bảo các class như .table-debt chỉ dùng cho bảng nợ */
+@media (max-width: 767px) {
+    .table-debt {
+        /* CSS Card mobile của bạn ở đây */
+    }
 }
