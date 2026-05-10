@@ -84,63 +84,88 @@ function updateLiveInfo() {
 }
 
 async function takePhoto() {
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    const photoPreview = document.getElementById('photo-preview');
-    const finalAddress = document.getElementById('final-address');
-    const finalCoords = document.getElementById('final-coords');
-    const startBtn = document.getElementById('start-camera-btn');
-    const previewContainer = document.getElementById('preview-container');
-    const submitBtn = document.getElementById('final-submit-btn');
-    const ctx = canvas.getContext('2d');
+  const video = document.getElementById("video");
+  const canvas = document.getElementById("canvas");
+  const photoPreview = document.getElementById("photo-preview");
+  const finalAddress = document.getElementById("final-address"); // Nơi hiện chữ
+  const finalCoords = document.getElementById("final-coords");
+  const startBtn = document.getElementById("start-camera-btn");
+  const previewContainer = document.getElementById("preview-container");
+  const submitBtn = document.getElementById("final-submit-btn");
+  const ctx = canvas.getContext("2d");
 
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  // Cấu hình Canvas
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(async (pos) => {
-            const lat = pos.coords.latitude;
-            const lng = pos.coords.longitude;
+  if (navigator.geolocation) {
+    // Đổi trạng thái hiển thị để người dùng biết đang xử lý
+    finalAddress.innerHTML =
+      '<span class="spinner-border spinner-border-sm"></span> Đang định vị...';
 
-            // 1. Gọi API lấy địa chỉ chi tiết
-            let fullAddr = "Không xác định được địa chỉ cụ thể";
-            try {
-                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`);
-                const data = await response.json();
-                const addr = data.address;
-                
-                // Bóc tách: Ấp/Đường, Xã/Phường, Huyện/Quận, Tỉnh/Thành Phố
-                const ap = addr.road || addr.village || addr.suburb || "";
-                const huyen = addr.district || addr.county || "";
-                const tinh = addr.city || addr.state || addr.province || "";
-                
-                fullAddr = `${ap}${ap?', ':''}${huyen}${huyen?', ':''}${tinh}`;
-            } catch (e) {
-                fullAddr = "Lỗi lấy địa chỉ, vui lòng kiểm tra mạng!";
-            }
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
 
-            // 2. Đóng dấu lên ảnh
-            ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
-            ctx.fillRect(0, canvas.height - 120, canvas.width, 120);
-            ctx.fillStyle = "white";
-            ctx.font = "bold 24px Arial";
-            ctx.fillText(new Date().toLocaleString('vi-VN'), 20, canvas.height - 80);
-            ctx.font = "20px Arial";
-            ctx.fillText(fullAddr, 20, canvas.height - 40);
+        try {
+          // Gọi API lấy địa chỉ (Duy dùng API này rất ổn cho Niên luận)
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`,
+          );
+          const data = await response.json();
+          const a = data.address;
 
-            // 3. Đẩy kết quả ra màn hình chính
-            photoPreview.src = canvas.toDataURL('image/jpeg');
-            finalAddress.innerText = fullAddr; // Hiện địa chỉ chi tiết ra ngoài
-            finalCoords.innerText = `GPS: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+          // Bóc tách địa chỉ theo kiểu Việt Nam
+          // Lấy Ấp/Số nhà/Đường
+          let ap = a.road || a.village || a.hamlet || a.suburb || "";
+          // Lấy Huyện/Quận
+          let huyen = a.district || a.county || a.town || "";
+          // Lấy Tỉnh/Thành phố
+          let tinh = a.city || a.state || a.province || "";
 
-            previewContainer.classList.remove('d-none');
-            startBtn.classList.add('d-none');
-            submitBtn.classList.remove('d-none');
-            
-            closeCamera();
-        });
-    }
+          // Gộp lại thành chuỗi địa chỉ đẹp
+          let cleanAddr = [ap, huyen, tinh].filter(Boolean).join(", ");
+
+          if (!cleanAddr) cleanAddr = data.display_name; // Nếu không bóc được thì lấy chuỗi thô
+
+          // 1. Cập nhật chữ ra màn hình ngoài
+          finalAddress.innerText = cleanAddr;
+          finalCoords.innerText = `Tọa độ: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+
+          // 2. Đóng dấu trực tiếp lên ảnh
+          ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+          ctx.fillRect(0, canvas.height - 120, canvas.width, 120);
+          ctx.fillStyle = "#fff";
+          ctx.font = "bold 22px Arial";
+          ctx.fillText(
+            new Date().toLocaleString("vi-VN"),
+            20,
+            canvas.height - 75,
+          );
+          ctx.font = "18px Arial";
+          ctx.fillText(cleanAddr, 20, canvas.height - 35);
+
+          // 3. Hiển thị ảnh và ẩn/hiện nút
+          photoPreview.src = canvas.toDataURL("image/jpeg");
+          previewContainer.classList.remove("d-none");
+          startBtn.classList.add("d-none");
+          if (submitBtn) submitBtn.classList.remove("d-none");
+
+          // Tắt camera
+          closeCamera();
+        } catch (error) {
+          console.error(error);
+          finalAddress.innerText = "Lỗi: Không lấy được địa chỉ chi tiết.";
+        }
+      },
+      (err) => {
+        finalAddress.innerText = "Lỗi: Hãy bật định vị GPS!";
+      },
+      { enableHighAccuracy: true },
+    );
+  }
 }
 
 function handleCaptureAndCheckin() {
