@@ -172,10 +172,64 @@
 
     <!-- Dưới cùng file index.html -->
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="module" src="assets/js/main.js"></script>
-    <script src="assets/js/pages/employee-checkin.js"></script>
+    // Dán đoạn này vào cuối file HTML, ngay trước thẻ
+</body>
+<script>
+    async function handleCheckin() {
+        alert("Hệ thống đã nhận lệnh bấm nút!"); // Nếu hiện cái này là thành công 50%
+
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const photoPreview = document.getElementById('photo-preview');
+        const finalAddress = document.getElementById('final-address');
+
+        if (!video || !finalAddress) {
+            alert("Lỗi: Không tìm thấy ID video hoặc địa chỉ trên giao diện!");
+            return;
+        }
+
+        try {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+
+            if (navigator.geolocation) {
+                finalAddress.innerText = "Đang lấy vị trí GPS...";
+
+                navigator.geolocation.getCurrentPosition(async (pos) => {
+                    const lat = pos.coords.latitude;
+                    const lng = pos.coords.longitude;
+
+                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+                    const data = await response.json();
+
+                    const addr = data.display_name;
+
+                    // Hiển thị ra màn hình chính
+                    finalAddress.innerHTML = "<b>" + addr + "</b>";
+                    photoPreview.src = canvas.toDataURL('image/jpeg');
+                    document.getElementById('preview-container').classList.remove('d-none');
+
+                    // Đóng camera
+                    if (typeof closeCamera === "function") {
+                        closeCamera();
+                    } else {
+                        bootstrap.Modal.getInstance(document.getElementById('cameraModal')).hide();
+                    }
+                }, (err) => {
+                    alert("Lỗi GPS: " + err.message);
+                });
+            }
+        } catch (e) {
+            alert("Lỗi thực thi: " + e.message);
+        }
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module" src="assets/js/main.js"></script>
+<script src="assets/js/pages/employee-checkin.js"></script>
 </body>
 
 </html>
