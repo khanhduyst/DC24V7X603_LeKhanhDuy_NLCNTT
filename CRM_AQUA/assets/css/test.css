@@ -36,3 +36,46 @@
     width: 100%;
     object-fit: cover;
 }
+
+/* Nút chụp hình kiểu iPhone */
+.btn-capture {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: transparent;
+    border: 4px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+
+.btn-capture-inner {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: white;
+    transition: transform 0.1s ease;
+}
+
+.btn-capture:active .btn-capture-inner {
+    transform: scale(0.9);
+}
+
+/* Nút thoát camera */
+.btn-close-camera {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.5);
+    border: 1.5px solid rgba(255,255,255,0.3);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+}

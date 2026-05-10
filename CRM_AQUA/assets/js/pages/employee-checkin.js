@@ -32,98 +32,90 @@ function handleCheckIn() {
     alert("Trình duyệt của bạn không hỗ trợ định vị.");
   }
 }
+
 let stream;
 let cameraModal;
 
-// Tự động load Modal khi trang web sẵn sàng
-document.addEventListener("DOMContentLoaded", () => {
-  cameraModal = new bootstrap.Modal(document.getElementById("cameraModal"));
-});
-
 async function startCamera() {
   const video = document.getElementById("video");
-  const startBtn = document.getElementById("start-camera-btn");
-  const liveTime = document.getElementById("live-time");
-  const liveLocation = document.getElementById("live-location");
+  cameraModal = new bootstrap.Modal(document.getElementById("cameraModal"));
 
   try {
-    // 1. Xin quyền mở camera sau
     stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "environment" },
+      video: {
+        facingMode: "environment",
+        width: { ideal: 1920 },
+        height: { ideal: 1080 },
+      },
       audio: false,
     });
     video.srcObject = stream;
-
-    // 2. Mở Modal toàn màn hình
     cameraModal.show();
-    startBtn.classList.add("d-none");
-
-    // 3. Hiển thị thông tin TimeStamp live
-    updateLiveStamp(liveTime, liveLocation);
+    updateLiveInfo();
   } catch (err) {
-    alert("Không thể truy cập Camera. Vui lòng kiểm tra quyền trình duyệt!");
+    alert("Lỗi camera: " + err);
   }
 }
 
-function updateLiveStamp(timeEl, locEl) {
+function updateLiveInfo() {
+  const addr = document.getElementById("live-address");
+  const data = document.getElementById("live-data");
   const now = new Date();
-  timeEl.innerText = now.toLocaleString("vi-VN");
 
-  // Lấy tọa độ
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        locEl.innerText = `GPS: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`;
-      },
-      () => {
-        locEl.innerText = "GPS: Không xác định";
-      },
-    );
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      const lat = pos.coords.latitude.toFixed(4);
+      const lng = pos.coords.longitude.toFixed(4);
+      data.innerText = `${now.toLocaleDateString("vi-VN")} | GPS: ${lat}, ${lng}`;
+
+      // Gọi API lấy địa chỉ thực tế (OSM)
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
+        );
+        const json = await res.json();
+        addr.innerText =
+          json.address.city || json.address.state || "SÓC TRĂNG, VIỆT NAM";
+      } catch (e) {
+        addr.innerText = "SÓC TRĂNG, VIỆT NAM";
+      }
+    });
   }
 }
 
 function takePhoto() {
   const video = document.getElementById("video");
   const canvas = document.getElementById("canvas");
-  const photoPreview = document.getElementById("photo-preview");
-  const previewContainer = document.getElementById("preview-container");
+  const preview = document.getElementById("photo-preview");
   const ctx = canvas.getContext("2d");
 
-  // Thiết lập kích thước canvas
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
+  ctx.drawImage(video, 0, 0);
 
-  // 1. Vẽ hình từ video lên canvas
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  // Đóng dấu lên ảnh
+  ctx.fillStyle = "rgba(0,0,0,0.5)";
+  ctx.fillRect(0, canvas.height - 100, canvas.width, 100);
+  ctx.fillStyle = "white";
+  ctx.font = "bold 40px Arial";
+  ctx.fillText(
+    document.getElementById("live-address").innerText,
+    30,
+    canvas.height - 60,
+  );
+  ctx.font = "30px Arial";
+  ctx.fillText(
+    document.getElementById("live-data").innerText,
+    30,
+    canvas.height - 25,
+  );
 
-  // 2. Vẽ Watermark Đóng dấu (TimeStamp)
-  // Duy copy logic vẽ đè (DrawImage, WrapText) mà anh đã hướng dẫn ở câu trước dán vào đây nhé.
-  // ... logic vẽ đè của câu trước ...
-  // (Bổ sung: Ở đây, Duy hãy vẽ thông tin vào ảnh thật)
-
-  // 3. Chuyển canvas thành ảnh
-  const data = canvas.toDataURL("image/png");
-  photoPreview.src = data;
-
-  // 4. Đóng camera và quay về web
-  previewContainer.classList.remove("d-none");
+  preview.src = canvas.toDataURL("image/jpeg");
+  document.getElementById("preview-container").classList.remove("d-none");
   closeCamera();
 }
 
 function closeCamera() {
-  // Tắt stream để tiết kiệm pin
-  if (stream) {
-    stream.getTracks().forEach((track) => track.stop());
-  }
-  cameraModal.hide();
-  const startBtn = document.getElementById("start-camera-btn");
-  if (document.getElementById("photo-preview").src === "") {
-    startBtn.classList.remove("d-none");
-  }
-}
-
-function retakePhoto() {
-  document.getElementById("preview-container").classList.add("d-none");
-  document.getElementById("photo-preview").src = "";
-  startCamera();
+  if (stream) stream.getTracks().forEach((t) => t.stop());
+  bootstrap.Modal.getInstance(document.getElementById("cameraModal")).hide();
 }
