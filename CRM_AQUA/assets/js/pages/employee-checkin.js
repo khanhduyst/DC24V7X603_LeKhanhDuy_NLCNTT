@@ -83,36 +83,64 @@ function updateLiveInfo() {
   }
 }
 
-function takePhoto() {
-  const video = document.getElementById("video");
-  const canvas = document.getElementById("canvas");
-  const preview = document.getElementById("photo-preview");
-  const ctx = canvas.getContext("2d");
+async function takePhoto() {
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const photoPreview = document.getElementById('photo-preview');
+    const finalAddress = document.getElementById('final-address');
+    const finalCoords = document.getElementById('final-coords');
+    const startBtn = document.getElementById('start-camera-btn');
+    const previewContainer = document.getElementById('preview-container');
+    const submitBtn = document.getElementById('final-submit-btn');
+    const ctx = canvas.getContext('2d');
 
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  ctx.drawImage(video, 0, 0);
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-  // Đóng dấu lên ảnh
-  ctx.fillStyle = "rgba(0,0,0,0.5)";
-  ctx.fillRect(0, canvas.height - 100, canvas.width, 100);
-  ctx.fillStyle = "white";
-  ctx.font = "bold 40px Arial";
-  ctx.fillText(
-    document.getElementById("live-address").innerText,
-    30,
-    canvas.height - 60,
-  );
-  ctx.font = "30px Arial";
-  ctx.fillText(
-    document.getElementById("live-data").innerText,
-    30,
-    canvas.height - 25,
-  );
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
 
-  preview.src = canvas.toDataURL("image/jpeg");
-  document.getElementById("preview-container").classList.remove("d-none");
-  closeCamera();
+            // 1. Gọi API lấy địa chỉ chi tiết
+            let fullAddr = "Không xác định được địa chỉ cụ thể";
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`);
+                const data = await response.json();
+                const addr = data.address;
+                
+                // Bóc tách: Ấp/Đường, Xã/Phường, Huyện/Quận, Tỉnh/Thành Phố
+                const ap = addr.road || addr.village || addr.suburb || "";
+                const huyen = addr.district || addr.county || "";
+                const tinh = addr.city || addr.state || addr.province || "";
+                
+                fullAddr = `${ap}${ap?', ':''}${huyen}${huyen?', ':''}${tinh}`;
+            } catch (e) {
+                fullAddr = "Lỗi lấy địa chỉ, vui lòng kiểm tra mạng!";
+            }
+
+            // 2. Đóng dấu lên ảnh
+            ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
+            ctx.fillRect(0, canvas.height - 120, canvas.width, 120);
+            ctx.fillStyle = "white";
+            ctx.font = "bold 24px Arial";
+            ctx.fillText(new Date().toLocaleString('vi-VN'), 20, canvas.height - 80);
+            ctx.font = "20px Arial";
+            ctx.fillText(fullAddr, 20, canvas.height - 40);
+
+            // 3. Đẩy kết quả ra màn hình chính
+            photoPreview.src = canvas.toDataURL('image/jpeg');
+            finalAddress.innerText = fullAddr; // Hiện địa chỉ chi tiết ra ngoài
+            finalCoords.innerText = `GPS: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+
+            previewContainer.classList.remove('d-none');
+            startBtn.classList.add('d-none');
+            submitBtn.classList.remove('d-none');
+            
+            closeCamera();
+        });
+    }
 }
 
 function handleCaptureAndCheckin() {
