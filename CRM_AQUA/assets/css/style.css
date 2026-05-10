@@ -964,3 +964,159 @@ h6 i {
         padding-bottom: 20px;
     }
 }
+
+.bg-light-blue {
+  background-color: #e7f1ff;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rounded-4 {
+  border-radius: 1rem !important;
+}
+
+.avatar-sm img {
+  border: 2px solid #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.camera-module {
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-style: dashed !important;
+  border-width: 2px !important;
+}
+
+#video {
+  width: 100vw !important; /* Rộng 100% chiều rộng màn hình */
+  height: 100vh !important; /* Cao 100% chiều cao màn hình */
+  object-fit: cover !important; /* Phủ kín, chấp nhận cắt bớt 2 cạnh để không bị đen */
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1; /* Nằm dưới cùng */
+}
+
+#photo-preview {
+  max-height: 300px;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* Nút chụp hình kiểu iPhone */
+.btn-capture {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: transparent;
+  border: 4px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.btn-capture-inner {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: white;
+  transition: transform 0.1s ease;
+}
+
+.btn-capture:active .btn-capture-inner {
+  transform: scale(0.9);
+}
+
+/* Nút thoát camera */
+.btn-close-camera {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.btn-capture-outer {
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  animation: pulse-border 2s infinite; /* Hiệu ứng nhấp nháy */
+}
+
+@keyframes pulse-border {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+.btn-capture-inner {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ép Modal Modal Body không được có khoảng trắng */
+#cameraModal .modal-body {
+  padding: 0 !important;
+  margin: 0 !important;
+  background-color: #000 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  overflow: hidden !important;
+}
+
+/* Ép Video phải phủ kín toàn bộ màn hình điện thoại */
+#video {
+  position: fixed; /* Ép cố định */
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: 1;
+  transform: translate(-50%, -50%) scale(1.1); /* Phóng to nhẹ để chắc chắn tràn viền */
+  object-fit: cover !important;
+}
+
+/* Đưa lớp phủ thông tin lên trên cùng */
+.camera-overlay-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  padding-bottom: env(safe-area-inset-bottom); /* Hỗ trợ iPhone có tai thỏ */
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+}

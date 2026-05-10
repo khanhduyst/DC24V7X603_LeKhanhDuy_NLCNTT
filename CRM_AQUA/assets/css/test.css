@@ -1,155 +1,192 @@
-.bg-light-blue {
-  background-color: #e7f1ff;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.avatar-customer {
+  width: 50px;
+  height: 50px;
+  font-size: 1.2rem;
 }
 
-.rounded-4 {
-  border-radius: 1rem !important;
-}
-
-.avatar-sm img {
-  border: 2px solid #fff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.camera-module {
-  min-height: 150px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border-style: dashed !important;
-  border-width: 2px !important;
-}
-
-#video {
-  width: 100vw !important; /* Rộng 100% chiều rộng màn hình */
-  height: 100vh !important; /* Cao 100% chiều cao màn hình */
-  object-fit: cover !important; /* Phủ kín, chấp nhận cắt bớt 2 cạnh để không bị đen */
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1; /* Nằm dưới cùng */
-}
-
-#photo-preview {
-  max-height: 300px;
-  width: 100%;
-  object-fit: cover;
-}
-
-/* Nút chụp hình kiểu iPhone */
-.btn-capture {
-  width: 76px;
-  height: 76px;
-  border-radius: 50%;
-  background: transparent;
-  border: 4px solid white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.customer-card {
+  transition: transform 0.2s ease;
   cursor: pointer;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 }
 
-.btn-capture-inner {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: white;
-  transition: transform 0.1s ease;
+.customer-card:active {
+  transform: scale(0.97);
+  background-color: #f8f9fa;
 }
 
-.btn-capture:active .btn-capture-inner {
-  transform: scale(0.9);
-}
-
-/* Nút thoát camera */
-.btn-close-camera {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5);
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 20;
-}
-
-.btn-capture-outer {
-  width: 85px;
-  height: 85px;
-  border-radius: 50%;
-  border: 4px solid #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-  animation: pulse-border 2s infinite; /* Hiệu ứng nhấp nháy */
-}
-
-@keyframes pulse-border {
-  0% {
-    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
-  }
-  70% {
-    box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-  }
-}
-
-.btn-capture-inner {
-  width: 65px;
-  height: 65px;
-  border-radius: 50%;
+.btn-white {
   background: #fff;
+  border: none;
+}
+
+/* Màu Badge tùy chỉnh */
+.bg-success-subtle {
+  background-color: #d1e7dd !important;
+}
+.bg-danger-subtle {
+  background-color: #f8d7da !important;
+}
+.bg-warning-subtle {
+  background-color: #fff3cd !important;
+}
+
+/* Container bao ngoài để khống chế khoảng cách */
+.filter-wrapper {
+  margin: 0 -15px; /* Đẩy ra sát mép màn hình mobile nhìn cho đẹp */
+  padding: 0 15px;
+  overflow: hidden;
+}
+
+/* Ép các nút nằm trên 1 hàng và cho phép vuốt ngang */
+.filter-scroll-container {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 5px;
+  gap: 8px; /* Khoảng cách giữa các nút */
+  -webkit-overflow-scrolling: touch; /* Giúp vuốt trên iPhone mượt hơn */
 }
 
-/* Ép Modal Modal Body không được có khoảng trắng */
-#cameraModal .modal-body {
-  padding: 0 !important;
-  margin: 0 !important;
-  background-color: #000 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  overflow: hidden !important;
+/* Ẩn thanh cuộn (Scrollbar) */
+.filter-scroll-container::-webkit-scrollbar {
+  display: none;
 }
 
-/* Ép Video phải phủ kín toàn bộ màn hình điện thoại */
-#video {
-  position: fixed; /* Ép cố định */
-  top: 50%;
-  left: 50%;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  z-index: 1;
-  transform: translate(-50%, -50%) scale(1.1); /* Phóng to nhẹ để chắc chắn tràn viền */
-  object-fit: cover !important;
+/* Style cho từng nút (Chip) */
+.filter-chip {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 50px;
+  background-color: #f1f3f5;
+  color: #5f6368;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid #e9ecef;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
-/* Đưa lớp phủ thông tin lên trên cùng */
-.camera-overlay-bottom {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  z-index: 10;
-  padding-bottom: env(safe-area-inset-bottom); /* Hỗ trợ iPhone có tai thỏ */
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+/* Khi nút được chọn */
+.filter-chip.active {
+  background-color: #0d6efd;
+  color: white;
+  border-color: #0d6efd;
+  box-shadow: 0 4px 10px rgba(13, 110, 253, 0.2);
+}
+
+/* Hiệu ứng khi bấm */
+.filter-chip:active {
+  transform: scale(0.95);
+}
+
+
+.modal-content {
+    overflow: hidden;
+}
+.modal-header .btn-close {
+    font-size: 0.8rem;
+}
+#addCustomerForm .form-control:focus, 
+#addCustomerForm .form-select:focus {
+    background-color: #fff !important;
+    border: 1px solid #0d6efd !important;
+    box-shadow: none;
+}
+
+.btn-primary {
+    background-color: #0d6efd !important;
+    border: none;
+}
+
+/* Tùy chỉnh dropdown menu cho đẹp */
+.dropdown-menu {
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+}
+
+.dropdown-item {
+    border-radius: 8px;
+    padding: 8px 12px;
+}
+
+.icon-box {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.table thead th {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-size: 11px;
+    border-bottom: none;
+}
+
+.table tbody td {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-color: #f8f9fa;
+}
+
+.bg-primary-subtle { background-color: #e7f1ff !important; }
+.bg-danger-subtle { background-color: #f8d7da !important; }
+/* Container chính */
+.timeline-debt {
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 20px;
+}
+/* Đường kẻ dọc thanh mảnh */
+.timeline-debt::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e9ecef;
+}
+/* Từng item giao dịch */
+.hist-item {
+    position: relative;
+    padding-bottom: 25px;
+}
+/* Icon node chuẩn */
+.icon-node {
+    position: absolute;
+    left: -32px;
+    top: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    border: 2px solid #dee2e6;
+    font-size: 12px;
+}
+/* Bố cục nội dung */
+.hist-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+/* Summary Box kiểu hóa đơn */
+.summary-box {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+}
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
 }
