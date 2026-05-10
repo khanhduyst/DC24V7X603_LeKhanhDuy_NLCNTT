@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM AQUA - Dashboard</title>
+
+    <!-- Bootstrap 5 CSS & Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/test.css">
+</head>
+
+<body>
+
+    <!-- Container để Autoload Sidebar -->
+    <div id="sidebar-container"></div>
+
+    <main class="main-content">
+        <div id="header-container"></div>
+
+        <div class="container-fluid py-3">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <div>
+                    <h5 class="fw-bold mb-0">Chào, Nguyễn Văn A</h5>
+                    <p class="text-muted small mb-0">Hôm nay bạn có 5 lịch hẹn</p>
+                </div>
+                <div class="avatar-sm">
+                    <img src="https://ui-avatars.com/api/?name=NV&background=0D6EFD&color=fff" class="rounded-circle"
+                        width="45">
+                </div>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-6">
+                    <div class="card border-0 shadow-sm bg-primary text-white p-3 rounded-4">
+                        <p class="small mb-1 opacity-75">Doanh số Giống</p>
+                        <h4 class="fw-bold mb-0">85M</h4>
+                        <div class="progress mt-2" style="height: 4px; background: rgba(255,255,255,0.2);">
+                            <div class="progress-bar bg-white" style="width: 85%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card border-0 shadow-sm bg-success text-white p-3 rounded-4">
+                        <p class="small mb-1 opacity-75">Doanh số Thuốc</p>
+                        <h4 class="fw-bold mb-0">30M</h4>
+                        <div class="progress mt-2" style="height: 4px; background: rgba(255,255,255,0.2);">
+                            <div class="progress-bar bg-white" style="width: 60%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-body p-4 text-center">
+                    <h6 class="fw-bold mb-3">Check-in Khách hàng</h6>
+                    <div class="custom-field mb-3 text-start">
+                        <label class="small fw-bold text-muted text-uppercase">Chọn khách hàng / Đại lý</label>
+                        <select class="form-select form-select-lg border-light bg-light" id="customerSelect">
+                            <option selected disabled>-- Đang ở ao nhà ai? --</option>
+                            <option>Đại lý Bảy Tôm - Sóc Trăng</option>
+                            <option>Trại giống Hai Lúa</option>
+                            <option>Ao nuôi chú Ba</option>
+                        </select>
+                    </div>
+                    <div class="custom-field mb-4 text-start">
+                        <label class="small fw-bold text-muted text-uppercase">Ghi chú nhanh</label>
+                        <textarea class="form-control border-light bg-light" rows="2"
+                            placeholder="Tình trạng tôm, nhu cầu lấy thuốc..."></textarea>
+                    </div>
+                    <div class="custom-field mb-4 text-start">
+                        <label class="small fw-bold text-muted text-uppercase">Hình ảnh thực tế tại ao</label>
+                        <div class="camera-module bg-light rounded-3 p-3 text-center border">
+                            <div id="camera-container" class="mb-2 d-none">
+                                <video id="video" width="100%" height="auto" autoplay
+                                    class="rounded-3 shadow-sm"></video>
+                                <button type="button" class="btn btn-sm btn-danger mt-2" onclick="takePhoto()">
+                                    <i class="bi bi-camera-fill me-1"></i> Chụp hình
+                                </button>
+                            </div>
+
+                            <div id="preview-container" class="d-none">
+                                <canvas id="canvas" class="d-none"></canvas>
+                                <img id="photo-preview" src="" class="img-fluid rounded-3 shadow-sm mb-2">
+                                <button type="button" class="btn btn-sm btn-outline-secondary mt-2"
+                                    onclick="retakePhoto()">
+                                    <i class="bi bi-arrow-clockwise me-1"></i> Chụp lại
+                                </button>
+                            </div>
+
+                            <button type="button" id="start-camera-btn" class="btn btn-outline-primary py-3 w-100"
+                                onclick="startCamera()">
+                                <i class="bi bi-camera me-2"></i> Mở Camera báo cáo
+                            </button>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary w-100 py-3 rounded-3 shadow fw-bold" onclick="handleCheckIn()">
+                        <i class="bi bi-geo-alt-fill me-2"></i>XÁC NHẬN CHECK-IN
+                    </button>
+                    <p id="locationStatus" class="small text-muted mt-2 mb-0" style="display:none;">
+                        <i class="bi bi-pin-map"></i> Đã lấy được tọa độ GPS
+                    </p>
+                </div>
+            </div>
+
+            <h6 class="fw-bold mb-3">Lịch sử hôm nay</h6>
+            <div class="list-group list-group-flush shadow-sm rounded-4 overflow-hidden">
+                <div class="list-group-item d-flex align-items-center py-3 border-0 border-bottom">
+                    <div class="bg-light-blue p-2 rounded-circle me-3">
+                        <i class="bi bi-check-lg text-primary"></i>
+                    </div>
+                    <div>
+                        <p class="mb-0 fw-bold">Đại lý Bảy Tôm</p>
+                        <span class="small text-muted">Check-in lúc 08:30 • Đã lấy mẫu nước</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <!-- Dưới cùng file index.html -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="assets/js/main.js"></script>
+    <script src="assets/js/pages/employee-checkin.js"></script>
+</body>
+
+</html>

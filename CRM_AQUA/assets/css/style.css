@@ -115,7 +115,7 @@ body {
 .nav-link:hover,
 .nav-link.active {
   background: var(--primary-color);
-  color: white !important;
+  color: rgb(48, 47, 47) !important;
 }
 
 .nav-link i {
@@ -859,5 +859,108 @@ input[type="date"] {
 @media (min-width: 768px) {
     .border-md-end {
         border-right: 1px solid #eee !important;
+    }
+}
+
+.tab-scroll-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.tab-scroll-wrapper::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 30px;
+    background: linear-gradient(to left, rgba(255,255,255,1), rgba(255,255,255,0));
+    pointer-events: none;
+}
+
+.aqua-tabs {
+    gap: 1.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 15px;
+}
+
+.aqua-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.aqua-tabs .nav-link {
+    border: none !important;
+    background: transparent !important;
+    color: #6c757d;
+    font-weight: 500;
+    padding: 1rem 0.2rem;
+    position: relative;
+    white-space: nowrap;
+}
+
+.aqua-tabs .nav-link.active {
+    color: #0061f2 !important;
+    font-weight: 700;
+}
+
+.aqua-tabs .nav-link.active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #0061f2;
+}
+
+.custom-field label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #495057;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.custom-field .form-control, 
+.custom-field .form-select {
+    border: 1px solid #dee2e6 !important;
+    border-radius: 8px !important;
+    padding: 10px 12px !important;
+    font-size: 14px;
+}
+
+.border-primary {
+    border-color: rgba(13, 110, 253, 0.2) !important;
+}
+
+.border-success {
+    border-color: rgba(25, 135, 84, 0.2) !important;
+}
+
+h6 i {
+    vertical-align: middle;
+}
+
+@media (max-width: 767px) {
+    .card-body {
+        padding: 10px 4px !important;
+    }
+    
+    .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    
+    .custom-field {
+        padding-left: 4px !important;
+        padding-right: 4px !important;
+    }
+    
+    .border-end-md {
+        border-bottom: 1px solid #eee;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
     }
 }

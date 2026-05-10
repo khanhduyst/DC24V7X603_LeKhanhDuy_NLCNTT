@@ -1,125 +1,38 @@
-.custom-card {
-    border-radius: 15px;
-    overflow: hidden;
-}
-
-.main-content {
-    background-color: #f8f9fa;
-    min-height: 100vh;
-}
-
-.form-control, .form-select, .input-group-text {
-    border: 1px solid #e0e0e0;
-    transition: all 0.3s ease;
-}
-
-.form-control:focus {
-    background-color: #fff !important;
-    border-color: #0d6efd;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
-}
-
-.btn-primary {
-    border-radius: 8px;
-    font-weight: 500;
-}
-
-/* Thiết lập khung cho tất cả input và select trong form */
-.custom-field .form-control, 
-.custom-field .form-select {
-    border: 1px solid #dee2e6 !important; /* Tạo khung 4 cạnh */
-    border-radius: 8px !important;       /* Bo góc nhẹ cho hiện đại */
-    padding: 10px 12px !important;      /* Tạo không gian bên trong ô */
-    background-color: #fff !important;   /* Nền trắng sạch sẽ */
-    font-weight: 500;
-    color: #212529;
-    transition: all 0.2s ease-in-out;
-}
-
-/* Hiệu ứng khi click chuột vào ô (Focus) */
-.custom-field .form-control:focus, 
-.custom-field .form-select:focus {
-    border-color: #0d6efd !important;    /* Đổi màu khung sang xanh khi focus */
-    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15) !important; /* Đổ bóng nhẹ */
-    outline: none;
-}
-
-/* Định dạng nhãn Label phía trên input */
-.custom-field label {
-    font-size: 12px;
-    font-weight: 700;
-    color: #495057;
-    margin-bottom: 6px;
-    display: block;
-    text-transform: uppercase;
-}
-/* Class định danh riêng để không lỗi các trang khác */
-.aqua-tabs {
-    gap: 3rem; /* Khoảng cách giữa các tab */
-    position: relative;
-    padding-bottom: 0;
-}
-
-.aqua-tabs .nav-item {
-    margin-bottom: -1px; /* Đè lên border của card-header nếu có */
-}
-
-.aqua-tabs .nav-link {
-    border: none !important;
-    background: transparent !important;
-    color: #6c757d; /* Màu xám cho tab chưa chọn */
-    font-weight: 500;
-    padding: 1rem 0.5rem;
+.bg-light-blue {
+    background-color: #e7f1ff;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    transition: all 0.2s ease-in-out;
-    position: relative;
+    justify-content: center;
 }
 
-/* Icon trong tab */
-.aqua-tabs .nav-link i {
-    font-size: 1.1rem;
-    color: #94a3b8;
+.rounded-4 {
+    border-radius: 1rem !important;
 }
 
-/* Khi tab được chọn */
-.aqua-tabs .nav-link.active {
-    color: #0061f2 !important; /* Màu xanh đậm hiện đại */
-    font-weight: 700;
+.avatar-sm img {
+    border: 2px solid #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.aqua-tabs .nav-link.active i {
-    color: #0061f2 !important;
+.camera-module {
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-style: dashed !important;
+    border-width: 2px !important;
 }
 
-/* Đường gạch dưới dài chuẩn như ảnh mẫu */
-.aqua-tabs .nav-link.active::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%; /* Trải dài hết chiều ngang của tab */
-    height: 3px;
-    background-color: #0061f2;
-    border-radius: 2px;
+#video {
+    background: #000;
+    max-height: 300px;
+    object-fit: cover;
 }
 
-/* Hiệu ứng hover nhẹ */
-.aqua-tabs .nav-link:hover {
-    color: #495057;
-}
-
-.avatar-preview {
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.avatar-preview:hover {
-    border-color: #0d6efd !important;
-    background-color: #f1f5f9 !important;
-}
-
-#imgOut {
-    border-radius: 50%;
+#photo-preview {
+    max-height: 300px;
+    width: 100%;
+    object-fit: cover;
 }

@@ -43,3 +43,27 @@ function previewFile() {
     preview.src = "";
   }
 }
+
+document.getElementById("empType").addEventListener("change", function () {
+  const salaryGroup = document.getElementById("baseSalaryGroup");
+  const salaryInput = salaryGroup.querySelector("input");
+
+  if (this.value === "collaborator") {
+    salaryInput.value = "0";
+    salaryInput.disabled = true;
+    salaryGroup.style.opacity = "0.5";
+  } else {
+    salaryInput.disabled = false;
+    salaryGroup.style.opacity = "1";
+  }
+});
+
+function generatePass() {
+  const chars =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#";
+  let pass = "";
+  for (let i = 0; i < 8; i++) {
+    pass += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  document.getElementById("tempPassword").value = "Aqua@" + pass;
+}
