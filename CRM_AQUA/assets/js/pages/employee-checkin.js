@@ -84,62 +84,62 @@ function updateLiveInfo() {
 }
 
 async function takePhoto() {
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    const photoPreview = document.getElementById('photo-preview');
-    const finalAddress = document.getElementById('final-address');
-    const ctx = canvas.getContext('2d');
+    console.log("Đã bấm nút chụp!"); // Kiểm tra xem nút có ăn lệnh không
+    
+    const video = document.querySelector('#video');
+    const canvas = document.querySelector('#canvas');
+    const photoPreview = document.querySelector('#photo-preview');
+    const finalAddress = document.querySelector('#final-address');
 
-    // 1. Chụp ảnh trước
+    if (!video || !finalAddress) {
+        console.error("LỖI: Không tìm thấy thẻ video hoặc final-address trong HTML!");
+        alert("Lỗi giao diện, hãy kiểm tra Console Eruda");
+        return;
+    }
+
+    // Chụp ảnh ngay
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
-    ctx.drawImage(video, 0, 0);
+    canvas.getContext('2d').drawImage(video, 0, 0);
 
     if (navigator.geolocation) {
-        finalAddress.innerText = "Đang kết nối GPS...";
+        finalAddress.innerText = "Đang định vị GPS...";
+        console.log("Đang gọi GPS...");
 
         navigator.geolocation.getCurrentPosition(async (pos) => {
             const lat = pos.coords.latitude;
             const lng = pos.coords.longitude;
+            console.log("Tọa độ lấy được:", lat, lng);
 
             try {
-                // 2. Gọi API
-                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`);
+                // Gọi API lấy địa chỉ
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
                 const data = await response.json();
+                const displayAddr = data.display_name;
                 
-                // Lấy địa chỉ thô nhất có thể để test
-                const displayAddr = data.display_name; 
-                
-                // 3. HIỆN ALERT ĐỂ KIỂM TRA TRÊN ĐIỆN THOẠI
-                // Nếu cái này hiện ra địa chỉ nghĩa là API chạy tốt
-                // alert("Địa chỉ lấy được: " + displayAddr);
+                console.log("Địa chỉ lấy được:", displayAddr);
 
-                // 4. Ép ghi ra ngoài màn hình
-                if (finalAddress) {
-                    finalAddress.innerHTML = "<b>" + displayAddr + "</b>";
-                }
-
-                // 5. Đóng dấu lên ảnh
-                ctx.fillStyle = "rgba(0,0,0,0.5)";
-                ctx.fillRect(0, canvas.height - 80, canvas.width, 80);
-                ctx.fillStyle = "white";
-                ctx.font = "20px Arial";
-                ctx.fillText(displayAddr.substring(0, 50) + "...", 20, canvas.height - 30);
-
-                // 6. Trả ảnh ra ngoài
+                // Cập nhật ra ngoài
+                finalAddress.innerText = displayAddr;
                 photoPreview.src = canvas.toDataURL('image/jpeg');
-                document.getElementById('preview-container').classList.remove('d-none');
                 
-                // 7. Đóng camera
+                // Hiện khung preview
+                document.querySelector('#preview-container').classList.remove('d-none');
+                
+                // Đóng camera
                 closeCamera();
+                console.log("Check-in thành công!");
 
             } catch (err) {
-                alert("Lỗi gọi API: " + err.message);
-                finalAddress.innerText = "Lỗi mạng!";
+                console.error("Lỗi API:", err);
+                finalAddress.innerText = "Lỗi kết nối địa chỉ!";
             }
         }, (error) => {
-            alert("Lỗi GPS: " + error.message);
-        });
+            console.error("Lỗi GPS:", error.message);
+            finalAddress.innerText = "Lỗi: " + error.message;
+        }, { enableHighAccuracy: true, timeout: 5000 });
+    } else {
+        console.error("Trình duyệt không hỗ trợ Geolocation");
     }
 }
 

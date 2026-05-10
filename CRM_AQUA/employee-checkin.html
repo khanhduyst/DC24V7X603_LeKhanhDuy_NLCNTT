@@ -11,7 +11,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
+    <script>
+        eruda.init();
+        console.log("Eruda đã sẵn sàng!"); // Dòng này để kiểm tra console có chạy không
+        window.onerror = function (msg, url, line) {
+            console.error("LỖI HỆ THỐNG: " + msg + " tại dòng: " + line);
+        };
+    </script>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/test.css">
 </head>
