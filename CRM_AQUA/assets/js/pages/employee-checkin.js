@@ -115,6 +115,46 @@ function takePhoto() {
   closeCamera();
 }
 
+function handleCaptureAndCheckin() {
+  const video = document.getElementById("video");
+  const canvas = document.getElementById("canvas");
+  const photoPreview = document.getElementById("photo-preview");
+  const ctx = canvas.getContext("2d");
+
+  // 1. Chụp ảnh từ Video
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  // 2. Lấy dữ liệu để đóng dấu (Watermark)
+  const address = document.getElementById("live-address").innerText;
+  const info = document.getElementById("live-data").innerText;
+
+  // Vẽ nền mờ cho chữ
+  ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+  ctx.fillRect(0, canvas.height - 150, canvas.width, 150);
+
+  // Vẽ chữ đóng dấu
+  ctx.fillStyle = "white";
+  ctx.font = "bold 28px Arial";
+  ctx.fillText(address, 30, canvas.height - 90);
+  ctx.font = "22px Arial";
+  ctx.fillText(info, 30, canvas.height - 50);
+  ctx.fillText("XÁC NHẬN CHECK-IN TẠI AO", 30, canvas.height - 20);
+
+  // 3. Hiển thị kết quả ra màn hình chính
+  const finalImage = canvas.toDataURL("image/jpeg");
+  photoPreview.src = finalImage;
+  document.getElementById("preview-container").classList.remove("d-none");
+
+  // 4. Thông báo và đóng Camera
+  alert("Đã ghi nhận vị trí và hình ảnh check-in!");
+  closeCamera();
+
+  // Gợi ý: Ở đây em có thể gọi thêm hàm lưu vào Database luôn
+  // saveCheckinData(finalImage, address, info);
+}
+
 function closeCamera() {
   if (stream) stream.getTracks().forEach((t) => t.stop());
   bootstrap.Modal.getInstance(document.getElementById("cameraModal")).hide();
